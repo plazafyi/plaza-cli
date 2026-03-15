@@ -5,8 +5,8 @@ package cmd
 import (
 	"testing"
 
-	"github.com/stainless-sdks/plaza-cli/internal/mocktest"
-	"github.com/stainless-sdks/plaza-cli/internal/requestflag"
+	"github.com/plazafyi/plaza-cli/internal/mocktest"
+	"github.com/plazafyi/plaza-cli/internal/requestflag"
 )
 
 func TestV1ElementsRetrieve(t *testing.T) {
