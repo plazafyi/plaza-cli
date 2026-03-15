@@ -5,7 +5,7 @@ package cmd
 import (
 	"testing"
 
-	"github.com/stainless-sdks/plaza-cli/internal/mocktest"
+	"github.com/plazafyi/plaza-cli/internal/mocktest"
 )
 
 func TestV1GeocodeAutocomplete(t *testing.T) {

@@ -10,8 +10,8 @@ import (
 	"os"
 	"slices"
 
-	"github.com/stainless-sdks/plaza-cli/pkg/cmd"
-	"github.com/stainless-sdks/plaza-go"
+	"github.com/plazafyi/plaza-cli/pkg/cmd"
+	"github.com/plazafyi/plaza-go"
 	"github.com/tidwall/gjson"
 	"github.com/urfave/cli/v3"
 )

@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/stainless-sdks/plaza-cli/internal/apiquery"
-	"github.com/stainless-sdks/plaza-cli/internal/requestflag"
-	"github.com/stainless-sdks/plaza-go"
-	"github.com/stainless-sdks/plaza-go/option"
+	"github.com/plazafyi/plaza-cli/internal/apiquery"
+	"github.com/plazafyi/plaza-cli/internal/requestflag"
+	"github.com/plazafyi/plaza-go"
+	"github.com/plazafyi/plaza-go/option"
 	"github.com/tidwall/gjson"
 	"github.com/urfave/cli/v3"
 )

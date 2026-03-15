@@ -16,8 +16,8 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/stainless-sdks/plaza-cli/internal/jsonview"
-	"github.com/stainless-sdks/plaza-go/option"
+	"github.com/plazafyi/plaza-cli/internal/jsonview"
+	"github.com/plazafyi/plaza-go/option"
 
 	"github.com/charmbracelet/x/term"
 	"github.com/itchyny/json2yaml"

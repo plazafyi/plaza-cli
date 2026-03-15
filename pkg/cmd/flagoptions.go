@@ -14,11 +14,11 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/stainless-sdks/plaza-cli/internal/apiform"
-	"github.com/stainless-sdks/plaza-cli/internal/apiquery"
-	"github.com/stainless-sdks/plaza-cli/internal/debugmiddleware"
-	"github.com/stainless-sdks/plaza-cli/internal/requestflag"
-	"github.com/stainless-sdks/plaza-go/option"
+	"github.com/plazafyi/plaza-cli/internal/apiform"
+	"github.com/plazafyi/plaza-cli/internal/apiquery"
+	"github.com/plazafyi/plaza-cli/internal/debugmiddleware"
+	"github.com/plazafyi/plaza-cli/internal/requestflag"
+	"github.com/plazafyi/plaza-go/option"
 
 	"github.com/goccy/go-yaml"
 	"github.com/urfave/cli/v3"
