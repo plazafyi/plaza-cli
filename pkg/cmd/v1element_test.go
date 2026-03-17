@@ -13,8 +13,9 @@ func TestV1ElementsRetrieve(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
-			t, "v1:elements", "retrieve",
+			t,
 			"--api-key", "string",
+			"v1:elements", "retrieve",
 			"--type", "type",
 			"--id", "0",
 		)
@@ -25,8 +26,9 @@ func TestV1ElementsFetchBatch(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
-			t, "v1:elements", "fetch-batch",
+			t,
 			"--api-key", "string",
+			"v1:elements", "fetch-batch",
 			"--element", "{id: 0, type: node}",
 		)
 	})
@@ -37,8 +39,9 @@ func TestV1ElementsFetchBatch(t *testing.T) {
 
 		// Alternative argument passing style using inner flags
 		mocktest.TestRunMockTestWithFlags(
-			t, "v1:elements", "fetch-batch",
+			t,
 			"--api-key", "string",
+			"v1:elements", "fetch-batch",
 			"--element.id", "0",
 			"--element.type", "node",
 		)
@@ -51,8 +54,9 @@ func TestV1ElementsFetchBatch(t *testing.T) {
 			"  - id: 0\n" +
 			"    type: node\n")
 		mocktest.TestRunMockTestWithPipeAndFlags(
-			t, pipeData, "v1:elements", "fetch-batch",
+			t, pipeData,
 			"--api-key", "string",
+			"v1:elements", "fetch-batch",
 		)
 	})
 }
@@ -61,8 +65,9 @@ func TestV1ElementsQuery(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
-			t, "v1:elements", "query",
+			t,
 			"--api-key", "string",
+			"v1:elements", "query",
 			"--bbox", "bbox",
 			"--cursor", "cursor",
 			"--h3", "h3",
