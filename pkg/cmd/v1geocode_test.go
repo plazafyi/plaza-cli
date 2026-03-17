@@ -12,8 +12,9 @@ func TestV1GeocodeAutocomplete(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
-			t, "v1:geocode", "autocomplete",
+			t,
 			"--api-key", "string",
+			"v1:geocode", "autocomplete",
 			"--q", "q",
 			"--lat", "0",
 			"--limit", "0",
@@ -26,8 +27,9 @@ func TestV1GeocodeForward(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
-			t, "v1:geocode", "forward",
+			t,
 			"--api-key", "string",
+			"v1:geocode", "forward",
 			"--q", "q",
 			"--lat", "0",
 			"--limit", "0",
@@ -40,8 +42,9 @@ func TestV1GeocodeReverse(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
-			t, "v1:geocode", "reverse",
+			t,
 			"--api-key", "string",
+			"v1:geocode", "reverse",
 			"--lat", "0",
 			"--lng", "0",
 			"--radius", "0",
