@@ -9,70 +9,66 @@ import (
 	"github.com/plazafyi/plaza-cli/internal/requestflag"
 )
 
-func TestV1ElementsRetrieve(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
+func TestRoutingMatrix(t *testing.T) {
+	t.Skip("Mock server doesn't support callbacks yet")
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
 			t,
 			"--api-key", "string",
-			"v1:elements", "retrieve",
-			"--type", "type",
-			"--id", "0",
-		)
-	})
-}
-
-func TestV1ElementsFetchBatch(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
-	t.Run("regular flags", func(t *testing.T) {
-		mocktest.TestRunMockTestWithFlags(
-			t,
-			"--api-key", "string",
-			"v1:elements", "fetch-batch",
-			"--element", "{id: 0, type: node}",
+			"routing", "matrix",
+			"--destinations", "{coordinates: [0], type: Point}",
+			"--origins", "{coordinates: [0], type: Point}",
+			"--mode", "auto",
 		)
 	})
 
 	t.Run("inner flags", func(t *testing.T) {
 		// Check that inner flags have been set up correctly
-		requestflag.CheckInnerFlags(v1ElementsFetchBatch)
+		requestflag.CheckInnerFlags(routingMatrix)
 
 		// Alternative argument passing style using inner flags
 		mocktest.TestRunMockTestWithFlags(
 			t,
 			"--api-key", "string",
-			"v1:elements", "fetch-batch",
-			"--element.id", "0",
-			"--element.type", "node",
+			"routing", "matrix",
+			"--destinations.coordinates", "[0]",
+			"--destinations.type", "Point",
+			"--origins.coordinates", "[0]",
+			"--origins.type", "Point",
+			"--mode", "auto",
 		)
 	})
 
 	t.Run("piping data", func(t *testing.T) {
 		// Test piping YAML data over stdin
 		pipeData := []byte("" +
-			"elements:\n" +
-			"  - id: 0\n" +
-			"    type: node\n")
+			"destinations:\n" +
+			"  coordinates:\n" +
+			"    - 0\n" +
+			"  type: Point\n" +
+			"origins:\n" +
+			"  coordinates:\n" +
+			"    - 0\n" +
+			"  type: Point\n" +
+			"mode: auto\n")
 		mocktest.TestRunMockTestWithPipeAndFlags(
 			t, pipeData,
 			"--api-key", "string",
-			"v1:elements", "fetch-batch",
+			"routing", "matrix",
 		)
 	})
 }
 
-func TestV1ElementsQuery(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
+func TestRoutingNearest(t *testing.T) {
+	t.Skip("Mock server doesn't support callbacks yet")
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
 			t,
 			"--api-key", "string",
-			"v1:elements", "query",
-			"--bbox", "bbox",
-			"--cursor", "cursor",
-			"--h3", "h3",
-			"--limit", "0",
-			"--type", "type",
+			"routing", "nearest",
+			"--lat", "0",
+			"--lng", "0",
+			"--radius", "0",
 		)
 	})
 }

@@ -1,12 +1,18 @@
 # Plaza CLI
 
-The official CLI for the Plaza REST API.
+The official CLI for the [Plaza REST API](https://docs.plaza.fyi).
 
 It is generated with [Stainless](https://www.stainless.com/).
 
 <!-- x-release-please-start-version -->
 
 ## Installation
+
+### Installing with Homebrew
+
+```sh
+brew install plazafyi/tap/plaza
+```
 
 ### Installing with Go
 
@@ -48,21 +54,24 @@ plaza [resource] <command> [flags...]
 ```
 
 ```sh
-plaza v1:datasets list \
-  --api-key 'My API Key'
+plaza elements nearby \
+  --api-key 'My API Key' \
+  --lat 48.8584 \
+  --lng 0 \
+  --radius 500
 ```
 
 For details about specific commands, use the `--help` flag.
 
 ### Environment variables
 
-| Environment variable | Description                                                   | Required |
-| -------------------- | ------------------------------------------------------------- | -------- |
-| `PLAZA_API_KEY`      | API key passed as Bearer token: `Authorization: Bearer <key>` | yes      |
+| Environment variable | Description   | Required |
+| -------------------- | ------------- | -------- |
+| `PLAZA_API_KEY`      | Plaza API key | yes      |
 
 ### Global flags
 
-- `--api-key` - API key passed as Bearer token: `Authorization: Bearer <key>` (can also be set with `PLAZA_API_KEY` env var)
+- `--api-key` - Plaza API key (can also be set with `PLAZA_API_KEY` env var)
 - `--help` - Show command line usage
 - `--debug` - Enable debug logging (includes HTTP request/response details)
 - `--version`, `-v` - Show the CLI version

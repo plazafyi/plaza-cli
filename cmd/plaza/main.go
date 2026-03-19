@@ -31,11 +31,11 @@ func main() {
 			exitCode = exitErr.ExitCode()
 		}
 
-		var apierr *plaza.Error
+		var apierr *githubcomplazafyiplazago.Error
 		if errors.As(err, &apierr) {
 			fmt.Fprintf(os.Stderr, "%s %q: %d %s\n", apierr.Request.Method, apierr.Request.URL, apierr.Response.StatusCode, http.StatusText(apierr.Response.StatusCode))
 			format := app.String("format-error")
-			json := gjson.Parse(apierr.RawJSON())
+			json := gjson.Parse(apierr.JSON.RawJSON())
 			show_err := cmd.ShowJSON(os.Stdout, "Error", json, format, app.String("transform-error"))
 			if show_err != nil {
 				// Just print the original error:

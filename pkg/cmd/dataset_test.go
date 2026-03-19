@@ -8,13 +8,13 @@ import (
 	"github.com/plazafyi/plaza-cli/internal/mocktest"
 )
 
-func TestV1DatasetsCreate(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
+func TestDatasetsCreate(t *testing.T) {
+	t.Skip("Mock server doesn't support callbacks yet")
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
 			t,
 			"--api-key", "string",
-			"v1:datasets", "create",
+			"datasets", "create",
 			"--name", "name",
 			"--slug", "slug",
 			"--attribution", "attribution",
@@ -36,56 +36,42 @@ func TestV1DatasetsCreate(t *testing.T) {
 		mocktest.TestRunMockTestWithPipeAndFlags(
 			t, pipeData,
 			"--api-key", "string",
-			"v1:datasets", "create",
+			"datasets", "create",
 		)
 	})
 }
 
-func TestV1DatasetsRetrieve(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
+func TestDatasetsRetrieve(t *testing.T) {
+	t.Skip("Mock server doesn't support callbacks yet")
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
 			t,
 			"--api-key", "string",
-			"v1:datasets", "retrieve",
+			"datasets", "retrieve",
 			"--id", "id",
 		)
 	})
 }
 
-func TestV1DatasetsList(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
+func TestDatasetsList(t *testing.T) {
+	t.Skip("Mock server doesn't support callbacks yet")
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
 			t,
 			"--api-key", "string",
-			"v1:datasets", "list",
+			"datasets", "list",
 		)
 	})
 }
 
-func TestV1DatasetsDelete(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
+func TestDatasetsDelete(t *testing.T) {
+	t.Skip("Mock server doesn't support callbacks yet")
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
 			t,
 			"--api-key", "string",
-			"v1:datasets", "delete",
+			"datasets", "delete",
 			"--id", "id",
-		)
-	})
-}
-
-func TestV1DatasetsQueryFeatures(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
-	t.Run("regular flags", func(t *testing.T) {
-		mocktest.TestRunMockTestWithFlags(
-			t,
-			"--api-key", "string",
-			"v1:datasets", "query-features",
-			"--id", "id",
-			"--cursor", "cursor",
-			"--limit", "0",
 		)
 	})
 }

@@ -67,7 +67,7 @@ snapshot:
 
 nfpms:
   - license: Apache-2.0
-    maintainer: 
+    maintainer: support@plaza.fyi
     bindir: /usr
     formats:
       - apk
@@ -78,3 +78,18 @@ nfpms:
     contents:
       - src: man/man1/*.1.gz
         dst: /usr/share/man/man1/
+homebrew_casks:
+  - name: plaza
+    repository:
+      owner: plazafyi
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    homepage: https://plaza.fyi
+    license: Apache-2.0
+    binary: "plaza"
+    completions:
+      bash: "completions/plaza.bash"
+      zsh: "completions/plaza.zsh"
+      fish: "completions/plaza.fish"
+    manpages:
+    - man/man1/plaza.1.gz
