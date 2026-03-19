@@ -72,7 +72,7 @@ func init() {
 			},
 			&requestflag.Flag[string]{
 				Name:    "api-key",
-				Usage:   "API key passed as Bearer token: `Authorization: Bearer <key>`",
+				Usage:   "Plaza API key",
 				Sources: cli.EnvVars("PLAZA_API_KEY"),
 			},
 			&cli.StringFlag{
@@ -82,53 +82,47 @@ func init() {
 		},
 		Commands: []*cli.Command{
 			{
-				Name:     "v1",
+				Name:     "datasets",
 				Category: "API RESOURCE",
 				Suggest:  true,
 				Commands: []*cli.Command{
-					&v1CalculateDistanceMatrix,
-					&v1CalculateIsochrone,
-					&v1CalculateRoute,
-					&v1ExecuteOverpass,
-					&v1ExecuteQuery,
-					&v1ExecuteSparql,
-					&v1FindNearby,
-					&v1GetTile,
-					&v1ReverseGeocode,
-					&v1SearchFeatures,
-					&v1SnapToNearest,
+					&datasetsCreate,
+					&datasetsRetrieve,
+					&datasetsList,
+					&datasetsDelete,
 				},
 			},
 			{
-				Name:     "v1:datasets",
+				Name:     "geocode",
 				Category: "API RESOURCE",
 				Suggest:  true,
 				Commands: []*cli.Command{
-					&v1DatasetsCreate,
-					&v1DatasetsRetrieve,
-					&v1DatasetsList,
-					&v1DatasetsDelete,
-					&v1DatasetsQueryFeatures,
+					&geocodeBatch,
 				},
 			},
 			{
-				Name:     "v1:elements",
+				Name:     "routing",
 				Category: "API RESOURCE",
 				Suggest:  true,
 				Commands: []*cli.Command{
-					&v1ElementsRetrieve,
-					&v1ElementsFetchBatch,
-					&v1ElementsQuery,
+					&routingMatrix,
+					&routingNearest,
 				},
 			},
 			{
-				Name:     "v1:geocode",
+				Name:     "optimize",
 				Category: "API RESOURCE",
 				Suggest:  true,
 				Commands: []*cli.Command{
-					&v1GeocodeAutocomplete,
-					&v1GeocodeForward,
-					&v1GeocodeReverse,
+					&optimizeRetrieve,
+				},
+			},
+			{
+				Name:     "tiles",
+				Category: "API RESOURCE",
+				Suggest:  true,
+				Commands: []*cli.Command{
+					&tilesGet,
 				},
 			},
 			{
