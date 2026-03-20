@@ -9,7 +9,6 @@ import (
 )
 
 func TestTilesGet(t *testing.T) {
-	t.Skip("Mock server doesn't support callbacks yet")
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
 			t,

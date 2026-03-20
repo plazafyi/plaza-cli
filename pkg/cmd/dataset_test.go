@@ -9,7 +9,6 @@ import (
 )
 
 func TestDatasetsCreate(t *testing.T) {
-	t.Skip("Mock server doesn't support callbacks yet")
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
 			t,
@@ -42,7 +41,6 @@ func TestDatasetsCreate(t *testing.T) {
 }
 
 func TestDatasetsRetrieve(t *testing.T) {
-	t.Skip("Mock server doesn't support callbacks yet")
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
 			t,
@@ -54,7 +52,6 @@ func TestDatasetsRetrieve(t *testing.T) {
 }
 
 func TestDatasetsList(t *testing.T) {
-	t.Skip("Mock server doesn't support callbacks yet")
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
 			t,
@@ -65,7 +62,6 @@ func TestDatasetsList(t *testing.T) {
 }
 
 func TestDatasetsDelete(t *testing.T) {
-	t.Skip("Mock server doesn't support callbacks yet")
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
 			t,
