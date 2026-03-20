@@ -82,6 +82,20 @@ func init() {
 		},
 		Commands: []*cli.Command{
 			{
+				Name:     "elements",
+				Category: "API RESOURCE",
+				Suggest:  true,
+				Commands: []*cli.Command{
+					&elementsRetrieve,
+					&elementsBatch,
+					&elementsLookup,
+					&elementsNearby,
+					&elementsNearbyPost,
+					&elementsQuery,
+					&elementsQueryPost,
+				},
+			},
+			{
 				Name:     "datasets",
 				Category: "API RESOURCE",
 				Suggest:  true,
@@ -90,6 +104,7 @@ func init() {
 					&datasetsRetrieve,
 					&datasetsList,
 					&datasetsDelete,
+					&datasetsFeatures,
 				},
 			},
 			{
@@ -97,7 +112,22 @@ func init() {
 				Category: "API RESOURCE",
 				Suggest:  true,
 				Commands: []*cli.Command{
+					&geocodeAutocomplete,
+					&geocodeAutocompletePost,
 					&geocodeBatch,
+					&geocodeForward,
+					&geocodeForwardPost,
+					&geocodeReverse,
+					&geocodeReversePost,
+				},
+			},
+			{
+				Name:     "search",
+				Category: "API RESOURCE",
+				Suggest:  true,
+				Commands: []*cli.Command{
+					&searchQuery,
+					&searchQueryPost,
 				},
 			},
 			{
@@ -105,8 +135,31 @@ func init() {
 				Category: "API RESOURCE",
 				Suggest:  true,
 				Commands: []*cli.Command{
+					&routingIsochrone,
+					&routingIsochronePost,
 					&routingMatrix,
 					&routingNearest,
+					&routingNearestPost,
+					&routingRoute,
+				},
+			},
+			{
+				Name:     "elevation",
+				Category: "API RESOURCE",
+				Suggest:  true,
+				Commands: []*cli.Command{
+					&elevationBatch,
+					&elevationLookup,
+					&elevationLookupPost,
+					&elevationProfile,
+				},
+			},
+			{
+				Name:     "map-match",
+				Category: "API RESOURCE",
+				Suggest:  true,
+				Commands: []*cli.Command{
+					&mapMatchMatch,
 				},
 			},
 			{
@@ -114,7 +167,18 @@ func init() {
 				Category: "API RESOURCE",
 				Suggest:  true,
 				Commands: []*cli.Command{
+					&optimizeCreate,
 					&optimizeRetrieve,
+				},
+			},
+			{
+				Name:     "query",
+				Category: "API RESOURCE",
+				Suggest:  true,
+				Commands: []*cli.Command{
+					&queryExecute,
+					&queryOverpass,
+					&querySparql,
 				},
 			},
 			{

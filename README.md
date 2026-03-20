@@ -54,10 +54,9 @@ plaza [resource] <command> [flags...]
 ```
 
 ```sh
-plaza elements nearby \
+plaza elements query \
   --api-key 'My API Key' \
-  --lat 48.8584 \
-  --lng 0 \
+  --near 48.8584,2.2945 \
   --radius 500
 ```
 
