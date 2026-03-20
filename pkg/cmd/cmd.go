@@ -12,8 +12,8 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/stainless-sdks/plaza-cli/internal/autocomplete"
-	"github.com/stainless-sdks/plaza-cli/internal/requestflag"
+	"github.com/plazafyi/plaza-cli/internal/autocomplete"
+	"github.com/plazafyi/plaza-cli/internal/requestflag"
 	docs "github.com/urfave/cli-docs/v3"
 	"github.com/urfave/cli/v3"
 )
@@ -72,7 +72,7 @@ func init() {
 			},
 			&requestflag.Flag[string]{
 				Name:    "api-key",
-				Usage:   "API key passed as Bearer token: `Authorization: Bearer <key>`",
+				Usage:   "Plaza API key",
 				Sources: cli.EnvVars("PLAZA_API_KEY"),
 			},
 			&cli.StringFlag{
@@ -82,53 +82,111 @@ func init() {
 		},
 		Commands: []*cli.Command{
 			{
-				Name:     "v1",
+				Name:     "elements",
 				Category: "API RESOURCE",
 				Suggest:  true,
 				Commands: []*cli.Command{
-					&v1CalculateDistanceMatrix,
-					&v1CalculateIsochrone,
-					&v1CalculateRoute,
-					&v1ExecuteOverpass,
-					&v1ExecuteQuery,
-					&v1ExecuteSparql,
-					&v1FindNearby,
-					&v1GetTile,
-					&v1ReverseGeocode,
-					&v1SearchFeatures,
-					&v1SnapToNearest,
+					&elementsRetrieve,
+					&elementsBatch,
+					&elementsLookup,
+					&elementsNearby,
+					&elementsNearbyPost,
+					&elementsQuery,
+					&elementsQueryPost,
 				},
 			},
 			{
-				Name:     "v1:datasets",
+				Name:     "datasets",
 				Category: "API RESOURCE",
 				Suggest:  true,
 				Commands: []*cli.Command{
-					&v1DatasetsCreate,
-					&v1DatasetsRetrieve,
-					&v1DatasetsList,
-					&v1DatasetsDelete,
-					&v1DatasetsQueryFeatures,
+					&datasetsCreate,
+					&datasetsRetrieve,
+					&datasetsList,
+					&datasetsDelete,
+					&datasetsFeatures,
 				},
 			},
 			{
-				Name:     "v1:elements",
+				Name:     "geocode",
 				Category: "API RESOURCE",
 				Suggest:  true,
 				Commands: []*cli.Command{
-					&v1ElementsRetrieve,
-					&v1ElementsFetchBatch,
-					&v1ElementsQuery,
+					&geocodeAutocomplete,
+					&geocodeAutocompletePost,
+					&geocodeBatch,
+					&geocodeForward,
+					&geocodeForwardPost,
+					&geocodeReverse,
+					&geocodeReversePost,
 				},
 			},
 			{
-				Name:     "v1:geocode",
+				Name:     "search",
 				Category: "API RESOURCE",
 				Suggest:  true,
 				Commands: []*cli.Command{
-					&v1GeocodeAutocomplete,
-					&v1GeocodeForward,
-					&v1GeocodeReverse,
+					&searchQuery,
+					&searchQueryPost,
+				},
+			},
+			{
+				Name:     "routing",
+				Category: "API RESOURCE",
+				Suggest:  true,
+				Commands: []*cli.Command{
+					&routingIsochrone,
+					&routingIsochronePost,
+					&routingMatrix,
+					&routingNearest,
+					&routingNearestPost,
+					&routingRoute,
+				},
+			},
+			{
+				Name:     "elevation",
+				Category: "API RESOURCE",
+				Suggest:  true,
+				Commands: []*cli.Command{
+					&elevationBatch,
+					&elevationLookup,
+					&elevationLookupPost,
+					&elevationProfile,
+				},
+			},
+			{
+				Name:     "map-match",
+				Category: "API RESOURCE",
+				Suggest:  true,
+				Commands: []*cli.Command{
+					&mapMatchMatch,
+				},
+			},
+			{
+				Name:     "optimize",
+				Category: "API RESOURCE",
+				Suggest:  true,
+				Commands: []*cli.Command{
+					&optimizeCreate,
+					&optimizeRetrieve,
+				},
+			},
+			{
+				Name:     "query",
+				Category: "API RESOURCE",
+				Suggest:  true,
+				Commands: []*cli.Command{
+					&queryExecute,
+					&queryOverpass,
+					&querySparql,
+				},
+			},
+			{
+				Name:     "tiles",
+				Category: "API RESOURCE",
+				Suggest:  true,
+				Commands: []*cli.Command{
+					&tilesGet,
 				},
 			},
 			{

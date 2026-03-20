@@ -1,18 +1,22 @@
 name: CI
 on:
   push:
-    branches-ignore:
-      - 'generated'
-      - 'codegen/**'
-      - 'integrated/**'
-      - 'stl-preview-head/**'
-      - 'stl-preview-base/**'
+    branches:
+      - '**'
+      - '!integrated/**'
+      - '!stl-preview-head/**'
+      - '!stl-preview-base/**'
+      - '!generated'
+      - '!codegen/**'
+      - 'codegen/stl/**'
   pull_request:
     branches-ignore:
       - 'stl-preview-head/**'
       - 'stl-preview-base/**'
+
 env:
-  GOPRIVATE: github.com/stainless-sdks/plaza-go
+  GOPRIVATE: github.com/plazafyi/plaza-go,github.com/stainless-sdks/plaza-go
+
 jobs:
   lint:
     timeout-minutes: 10
@@ -26,6 +30,14 @@ jobs:
       - uses: ./.github/actions/setup-go
         with:
           stainless-api-key: ${{ secrets.STAINLESS_API_KEY }}
+
+      - name: Link staging branch
+        if: github.repository == 'stainless-sdks/plaza-cli'
+        run: |
+          ./scripts/link 'github.com/stainless-sdks/plaza-go@${{ github.ref_name }}' || true
+
+      - name: Bootstrap
+        run: ./scripts/bootstrap
 
       - name: Run lints
         run: ./scripts/lint
@@ -44,6 +56,14 @@ jobs:
       - uses: ./.github/actions/setup-go
         with:
           stainless-api-key: ${{ secrets.STAINLESS_API_KEY }}
+
+      - name: Link staging branch
+        if: github.repository == 'stainless-sdks/plaza-cli'
+        run: |
+          ./scripts/link 'github.com/stainless-sdks/plaza-go@${{ github.ref_name }}' || true
+
+      - name: Bootstrap
+        run: ./scripts/bootstrap
 
       - name: Run goreleaser
         uses: goreleaser/goreleaser-action@v6.1.0
@@ -83,6 +103,14 @@ jobs:
       - uses: ./.github/actions/setup-go
         with:
           stainless-api-key: ${{ secrets.STAINLESS_API_KEY }}
+
+      - name: Link staging branch
+        if: github.repository == 'stainless-sdks/plaza-cli'
+        run: |
+          ./scripts/link 'github.com/stainless-sdks/plaza-go@${{ github.ref_name }}' || true
+
+      - name: Bootstrap
+        run: ./scripts/bootstrap
 
       - name: Run tests
         run: ./scripts/test

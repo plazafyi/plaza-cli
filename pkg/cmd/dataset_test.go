@@ -5,81 +5,90 @@ package cmd
 import (
 	"testing"
 
-	"github.com/stainless-sdks/plaza-cli/internal/mocktest"
+	"github.com/plazafyi/plaza-cli/internal/mocktest"
 )
 
-func TestV1DatasetsCreate(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
+func TestDatasetsCreate(t *testing.T) {
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
-			t, "v1:datasets", "create",
+			t,
 			"--api-key", "string",
-			"--name", "name",
-			"--slug", "slug",
+			"datasets", "create",
+			"--name", "NYC Bike Lanes",
+			"--slug", "nyc-bike-lanes",
 			"--attribution", "attribution",
 			"--description", "description",
 			"--license", "license",
-			"--source-url", "source_url",
+			"--source-url", "https://example.com",
 		)
 	})
 
 	t.Run("piping data", func(t *testing.T) {
 		// Test piping YAML data over stdin
 		pipeData := []byte("" +
-			"name: name\n" +
-			"slug: slug\n" +
+			"name: NYC Bike Lanes\n" +
+			"slug: nyc-bike-lanes\n" +
 			"attribution: attribution\n" +
 			"description: description\n" +
 			"license: license\n" +
-			"source_url: source_url\n")
+			"source_url: https://example.com\n")
 		mocktest.TestRunMockTestWithPipeAndFlags(
-			t, pipeData, "v1:datasets", "create",
+			t, pipeData,
 			"--api-key", "string",
+			"datasets", "create",
 		)
 	})
 }
 
-func TestV1DatasetsRetrieve(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
+func TestDatasetsRetrieve(t *testing.T) {
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
-			t, "v1:datasets", "retrieve",
+			t,
 			"--api-key", "string",
+			"datasets", "retrieve",
 			"--id", "id",
 		)
 	})
 }
 
-func TestV1DatasetsList(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
+func TestDatasetsList(t *testing.T) {
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
-			t, "v1:datasets", "list",
+			t,
 			"--api-key", "string",
+			"datasets", "list",
 		)
 	})
 }
 
-func TestV1DatasetsDelete(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
+func TestDatasetsDelete(t *testing.T) {
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
-			t, "v1:datasets", "delete",
+			t,
 			"--api-key", "string",
+			"datasets", "delete",
 			"--id", "id",
 		)
 	})
 }
 
-func TestV1DatasetsQueryFeatures(t *testing.T) {
-	t.Skip("Mock server tests are disabled")
+func TestDatasetsFeatures(t *testing.T) {
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
-			t, "v1:datasets", "query-features",
+			t,
 			"--api-key", "string",
+			"datasets", "features",
 			"--id", "id",
 			"--cursor", "cursor",
 			"--limit", "0",
+			"--output-buffer", "0",
+			"--output-centroid=true",
+			"--output-fields", "output[fields]",
+			"--output-geometry=true",
+			"--output-include", "output[include]",
+			"--output-precision", "0",
+			"--output-simplify", "0",
+			"--output-sort", "output[sort]",
 		)
 	})
 }

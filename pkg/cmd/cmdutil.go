@@ -16,8 +16,8 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/stainless-sdks/plaza-cli/internal/jsonview"
-	"github.com/stainless-sdks/plaza-go/option"
+	"github.com/plazafyi/plaza-cli/internal/jsonview"
+	"github.com/plazafyi/plaza-go/option"
 
 	"github.com/charmbracelet/x/term"
 	"github.com/itchyny/json2yaml"
@@ -51,10 +51,10 @@ func getDefaultRequestOptions(cmd *cli.Command) []option.RequestOption {
 		switch environment {
 		case "production":
 			opts = append(opts, option.WithEnvironmentProduction())
-		case "environment_1":
-			opts = append(opts, option.WithEnvironmentEnvironment1())
+		case "local":
+			opts = append(opts, option.WithEnvironmentLocal())
 		default:
-			log.Fatalf("Unknown environment: %s. Valid environments are %s", environment, "production, environment_1")
+			log.Fatalf("Unknown environment: %s. Valid environments are %s", environment, "production, local")
 		}
 	}
 

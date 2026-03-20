@@ -7,34 +7,34 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/stainless-sdks/plaza-cli/internal/apiquery"
-	"github.com/stainless-sdks/plaza-cli/internal/requestflag"
-	"github.com/stainless-sdks/plaza-go"
-	"github.com/stainless-sdks/plaza-go/option"
+	"github.com/plazafyi/plaza-cli/internal/apiquery"
+	"github.com/plazafyi/plaza-cli/internal/requestflag"
+	"github.com/plazafyi/plaza-go"
+	"github.com/plazafyi/plaza-go/option"
 	"github.com/tidwall/gjson"
 	"github.com/urfave/cli/v3"
 )
 
-var v1DatasetsCreate = cli.Command{
+var datasetsCreate = cli.Command{
 	Name:    "create",
 	Usage:   "Create a new dataset (admin only)",
 	Suggest: true,
 	Flags: []cli.Flag{
 		&requestflag.Flag[string]{
 			Name:     "name",
-			Usage:    "Dataset name",
+			Usage:    "Human-readable dataset name",
 			Required: true,
 			BodyPath: "name",
 		},
 		&requestflag.Flag[string]{
 			Name:     "slug",
-			Usage:    "URL-friendly slug",
+			Usage:    "URL-friendly identifier (lowercase, hyphens, no spaces)",
 			Required: true,
 			BodyPath: "slug",
 		},
 		&requestflag.Flag[any]{
 			Name:     "attribution",
-			Usage:    "Attribution text",
+			Usage:    "Required attribution text",
 			BodyPath: "attribution",
 		},
 		&requestflag.Flag[any]{
@@ -44,7 +44,7 @@ var v1DatasetsCreate = cli.Command{
 		},
 		&requestflag.Flag[any]{
 			Name:     "license",
-			Usage:    "License identifier",
+			Usage:    "License identifier (e.g. CC-BY-4.0)",
 			BodyPath: "license",
 		},
 		&requestflag.Flag[any]{
@@ -53,11 +53,11 @@ var v1DatasetsCreate = cli.Command{
 			BodyPath: "source_url",
 		},
 	},
-	Action:          handleV1DatasetsCreate,
+	Action:          handleDatasetsCreate,
 	HideHelpCommand: true,
 }
 
-var v1DatasetsRetrieve = cli.Command{
+var datasetsRetrieve = cli.Command{
 	Name:    "retrieve",
 	Usage:   "Get dataset by ID",
 	Suggest: true,
@@ -67,20 +67,20 @@ var v1DatasetsRetrieve = cli.Command{
 			Required: true,
 		},
 	},
-	Action:          handleV1DatasetsRetrieve,
+	Action:          handleDatasetsRetrieve,
 	HideHelpCommand: true,
 }
 
-var v1DatasetsList = cli.Command{
+var datasetsList = cli.Command{
 	Name:            "list",
 	Usage:           "List all datasets",
 	Suggest:         true,
 	Flags:           []cli.Flag{},
-	Action:          handleV1DatasetsList,
+	Action:          handleDatasetsList,
 	HideHelpCommand: true,
 }
 
-var v1DatasetsDelete = cli.Command{
+var datasetsDelete = cli.Command{
 	Name:    "delete",
 	Usage:   "Delete a dataset",
 	Suggest: true,
@@ -90,12 +90,12 @@ var v1DatasetsDelete = cli.Command{
 			Required: true,
 		},
 	},
-	Action:          handleV1DatasetsDelete,
+	Action:          handleDatasetsDelete,
 	HideHelpCommand: true,
 }
 
-var v1DatasetsQueryFeatures = cli.Command{
-	Name:    "query-features",
+var datasetsFeatures = cli.Command{
+	Name:    "features",
 	Usage:   "Query features in a dataset",
 	Suggest: true,
 	Flags: []cli.Flag{
@@ -113,20 +113,60 @@ var v1DatasetsQueryFeatures = cli.Command{
 			Usage:     "Maximum results",
 			QueryPath: "limit",
 		},
+		&requestflag.Flag[float64]{
+			Name:      "output-buffer",
+			Usage:     "Buffer geometry by meters",
+			QueryPath: "output[buffer]",
+		},
+		&requestflag.Flag[bool]{
+			Name:      "output-centroid",
+			Usage:     "Replace geometry with centroid",
+			QueryPath: "output[centroid]",
+		},
+		&requestflag.Flag[string]{
+			Name:      "output-fields",
+			Usage:     "Comma-separated property fields to include",
+			QueryPath: "output[fields]",
+		},
+		&requestflag.Flag[bool]{
+			Name:      "output-geometry",
+			Usage:     "Include geometry (default true)",
+			QueryPath: "output[geometry]",
+		},
+		&requestflag.Flag[string]{
+			Name:      "output-include",
+			Usage:     "Extra computed fields: bbox, distance, center",
+			QueryPath: "output[include]",
+		},
+		&requestflag.Flag[int64]{
+			Name:      "output-precision",
+			Usage:     "Coordinate decimal precision (1-15, default 7)",
+			QueryPath: "output[precision]",
+		},
+		&requestflag.Flag[float64]{
+			Name:      "output-simplify",
+			Usage:     "Simplify geometry tolerance in meters",
+			QueryPath: "output[simplify]",
+		},
+		&requestflag.Flag[string]{
+			Name:      "output-sort",
+			Usage:     "Sort by: distance, name, osm_id",
+			QueryPath: "output[sort]",
+		},
 	},
-	Action:          handleV1DatasetsQueryFeatures,
+	Action:          handleDatasetsFeatures,
 	HideHelpCommand: true,
 }
 
-func handleV1DatasetsCreate(ctx context.Context, cmd *cli.Command) error {
-	client := plaza.NewClient(getDefaultRequestOptions(cmd)...)
+func handleDatasetsCreate(ctx context.Context, cmd *cli.Command) error {
+	client := githubcomplazafyiplazago.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
 
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 
-	params := plaza.V1DatasetNewParams{}
+	params := githubcomplazafyiplazago.DatasetNewParams{}
 
 	options, err := flagOptions(
 		cmd,
@@ -141,7 +181,7 @@ func handleV1DatasetsCreate(ctx context.Context, cmd *cli.Command) error {
 
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))
-	_, err = client.V1.Datasets.New(ctx, params, options...)
+	_, err = client.Datasets.New(ctx, params, options...)
 	if err != nil {
 		return err
 	}
@@ -149,11 +189,11 @@ func handleV1DatasetsCreate(ctx context.Context, cmd *cli.Command) error {
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "v1:datasets create", obj, format, transform)
+	return ShowJSON(os.Stdout, "datasets create", obj, format, transform)
 }
 
-func handleV1DatasetsRetrieve(ctx context.Context, cmd *cli.Command) error {
-	client := plaza.NewClient(getDefaultRequestOptions(cmd)...)
+func handleDatasetsRetrieve(ctx context.Context, cmd *cli.Command) error {
+	client := githubcomplazafyiplazago.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("id") && len(unusedArgs) > 0 {
 		cmd.Set("id", unusedArgs[0])
@@ -176,7 +216,7 @@ func handleV1DatasetsRetrieve(ctx context.Context, cmd *cli.Command) error {
 
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))
-	_, err = client.V1.Datasets.Get(ctx, cmd.Value("id").(string), options...)
+	_, err = client.Datasets.Get(ctx, cmd.Value("id").(string), options...)
 	if err != nil {
 		return err
 	}
@@ -184,11 +224,11 @@ func handleV1DatasetsRetrieve(ctx context.Context, cmd *cli.Command) error {
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "v1:datasets retrieve", obj, format, transform)
+	return ShowJSON(os.Stdout, "datasets retrieve", obj, format, transform)
 }
 
-func handleV1DatasetsList(ctx context.Context, cmd *cli.Command) error {
-	client := plaza.NewClient(getDefaultRequestOptions(cmd)...)
+func handleDatasetsList(ctx context.Context, cmd *cli.Command) error {
+	client := githubcomplazafyiplazago.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
 
 	if len(unusedArgs) > 0 {
@@ -208,7 +248,7 @@ func handleV1DatasetsList(ctx context.Context, cmd *cli.Command) error {
 
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))
-	_, err = client.V1.Datasets.List(ctx, options...)
+	_, err = client.Datasets.List(ctx, options...)
 	if err != nil {
 		return err
 	}
@@ -216,11 +256,11 @@ func handleV1DatasetsList(ctx context.Context, cmd *cli.Command) error {
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "v1:datasets list", obj, format, transform)
+	return ShowJSON(os.Stdout, "datasets list", obj, format, transform)
 }
 
-func handleV1DatasetsDelete(ctx context.Context, cmd *cli.Command) error {
-	client := plaza.NewClient(getDefaultRequestOptions(cmd)...)
+func handleDatasetsDelete(ctx context.Context, cmd *cli.Command) error {
+	client := githubcomplazafyiplazago.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("id") && len(unusedArgs) > 0 {
 		cmd.Set("id", unusedArgs[0])
@@ -241,11 +281,11 @@ func handleV1DatasetsDelete(ctx context.Context, cmd *cli.Command) error {
 		return err
 	}
 
-	return client.V1.Datasets.Delete(ctx, cmd.Value("id").(string), options...)
+	return client.Datasets.Delete(ctx, cmd.Value("id").(string), options...)
 }
 
-func handleV1DatasetsQueryFeatures(ctx context.Context, cmd *cli.Command) error {
-	client := plaza.NewClient(getDefaultRequestOptions(cmd)...)
+func handleDatasetsFeatures(ctx context.Context, cmd *cli.Command) error {
+	client := githubcomplazafyiplazago.NewClient(getDefaultRequestOptions(cmd)...)
 	unusedArgs := cmd.Args().Slice()
 	if !cmd.IsSet("id") && len(unusedArgs) > 0 {
 		cmd.Set("id", unusedArgs[0])
@@ -255,7 +295,7 @@ func handleV1DatasetsQueryFeatures(ctx context.Context, cmd *cli.Command) error 
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 
-	params := plaza.V1DatasetQueryFeaturesParams{}
+	params := githubcomplazafyiplazago.DatasetFeaturesParams{}
 
 	options, err := flagOptions(
 		cmd,
@@ -270,7 +310,7 @@ func handleV1DatasetsQueryFeatures(ctx context.Context, cmd *cli.Command) error 
 
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))
-	_, err = client.V1.Datasets.QueryFeatures(
+	_, err = client.Datasets.Features(
 		ctx,
 		cmd.Value("id").(string),
 		params,
@@ -283,5 +323,5 @@ func handleV1DatasetsQueryFeatures(ctx context.Context, cmd *cli.Command) error 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "v1:datasets query-features", obj, format, transform)
+	return ShowJSON(os.Stdout, "datasets features", obj, format, transform)
 }
