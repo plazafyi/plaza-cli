@@ -39,6 +39,11 @@ var routingIsochrone = cli.Command{
 			QueryPath: "time",
 		},
 		&requestflag.Flag[string]{
+			Name:      "format",
+			Usage:     "Response format: json (default), geojson, csv, ndjson",
+			QueryPath: "format",
+		},
+		&requestflag.Flag[string]{
 			Name:      "mode",
 			Usage:     "Travel mode (auto, foot, bicycle)",
 			QueryPath: "mode",
@@ -95,6 +100,11 @@ var routingIsochronePost = cli.Command{
 			Usage:     "Travel time in seconds (1-7200)",
 			Required:  true,
 			QueryPath: "time",
+		},
+		&requestflag.Flag[string]{
+			Name:      "format",
+			Usage:     "Response format: json (default), geojson, csv, ndjson",
+			QueryPath: "format",
 		},
 		&requestflag.Flag[string]{
 			Name:      "mode",
@@ -295,6 +305,11 @@ var routingRoute = requestflag.WithInnerFlags(cli.Command{
 			Usage:    "Geographic coordinate as a JSON object with `lat` and `lng` fields.",
 			Required: true,
 			BodyPath: "origin",
+		},
+		&requestflag.Flag[string]{
+			Name:      "format",
+			Usage:     "Response format for alternatives: json (default), geojson, csv, ndjson",
+			QueryPath: "format",
 		},
 		&requestflag.Flag[int64]{
 			Name:     "alternatives",

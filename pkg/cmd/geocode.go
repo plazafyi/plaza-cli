@@ -32,6 +32,11 @@ var geocodeAutocomplete = cli.Command{
 			QueryPath: "country_code",
 		},
 		&requestflag.Flag[string]{
+			Name:      "format",
+			Usage:     "Response format: json (default), geojson, csv, ndjson",
+			QueryPath: "format",
+		},
+		&requestflag.Flag[string]{
 			Name:      "lang",
 			Usage:     "Language code for localized names (e.g. en, de, fr)",
 			QueryPath: "lang",
@@ -76,6 +81,11 @@ var geocodeAutocompletePost = cli.Command{
 			Name:      "country-code",
 			Usage:     "ISO 3166-1 alpha-2 country code filter",
 			QueryPath: "country_code",
+		},
+		&requestflag.Flag[string]{
+			Name:      "format",
+			Usage:     "Response format: json (default), geojson, csv, ndjson",
+			QueryPath: "format",
 		},
 		&requestflag.Flag[string]{
 			Name:      "lang",
@@ -144,6 +154,11 @@ var geocodeForward = cli.Command{
 			QueryPath: "country_code",
 		},
 		&requestflag.Flag[string]{
+			Name:      "format",
+			Usage:     "Response format: json (default), geojson, csv, ndjson",
+			QueryPath: "format",
+		},
+		&requestflag.Flag[string]{
 			Name:      "lang",
 			Usage:     "Language code for localized names (e.g. en, de, fr)",
 			QueryPath: "lang",
@@ -195,6 +210,11 @@ var geocodeForwardPost = cli.Command{
 			QueryPath: "country_code",
 		},
 		&requestflag.Flag[string]{
+			Name:      "format",
+			Usage:     "Response format: json (default), geojson, csv, ndjson",
+			QueryPath: "format",
+		},
+		&requestflag.Flag[string]{
 			Name:      "lang",
 			Usage:     "Language code for localized names (e.g. en, de, fr)",
 			QueryPath: "lang",
@@ -229,6 +249,11 @@ var geocodeReverse = cli.Command{
 	Usage:   "Reverse geocode a coordinate",
 	Suggest: true,
 	Flags: []cli.Flag{
+		&requestflag.Flag[string]{
+			Name:      "format",
+			Usage:     "Response format: json (default), geojson, csv, ndjson",
+			QueryPath: "format",
+		},
 		&requestflag.Flag[string]{
 			Name:      "lang",
 			Usage:     "Language code for localized names (e.g. en, de, fr)",
@@ -274,6 +299,11 @@ var geocodeReversePost = cli.Command{
 	Usage:   "Reverse geocode a coordinate",
 	Suggest: true,
 	Flags: []cli.Flag{
+		&requestflag.Flag[string]{
+			Name:      "format",
+			Usage:     "Response format: json (default), geojson, csv, ndjson",
+			QueryPath: "format",
+		},
 		&requestflag.Flag[string]{
 			Name:      "lang",
 			Usage:     "Language code for localized names (e.g. en, de, fr)",

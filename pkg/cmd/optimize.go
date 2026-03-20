@@ -27,6 +27,11 @@ var optimizeCreate = requestflag.WithInnerFlags(cli.Command{
 			BodyPath: "waypoints",
 		},
 		&requestflag.Flag[string]{
+			Name:      "format",
+			Usage:     "Response format: json (default), geojson, csv, ndjson",
+			QueryPath: "format",
+		},
+		&requestflag.Flag[string]{
 			Name:     "mode",
 			Usage:    "Travel mode (default: `auto`)",
 			Default:  "auto",

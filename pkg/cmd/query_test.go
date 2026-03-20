@@ -54,6 +54,7 @@ func TestQueryOverpass(t *testing.T) {
 			"--api-key", "string",
 			"query", "overpass",
 			"--data", "[out:json];node[amenity=cafe](around:500,48.8566,2.3522);out body;",
+			"--format", "format",
 		)
 	})
 
@@ -64,6 +65,7 @@ func TestQueryOverpass(t *testing.T) {
 			t, pipeData,
 			"--api-key", "string",
 			"query", "overpass",
+			"--format", "format",
 		)
 	})
 }

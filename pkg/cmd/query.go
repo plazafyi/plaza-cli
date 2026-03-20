@@ -55,6 +55,11 @@ var queryOverpass = cli.Command{
 			Required: true,
 			BodyPath: "data",
 		},
+		&requestflag.Flag[string]{
+			Name:      "format",
+			Usage:     "Response format: json (default), geojson, csv, ndjson",
+			QueryPath: "format",
+		},
 	},
 	Action:          handleQueryOverpass,
 	HideHelpCommand: true,
