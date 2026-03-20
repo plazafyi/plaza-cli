@@ -108,6 +108,11 @@ var datasetsFeatures = cli.Command{
 			Usage:     "Cursor for pagination",
 			QueryPath: "cursor",
 		},
+		&requestflag.Flag[string]{
+			Name:      "format",
+			Usage:     "Response format: json (default), geojson, csv, ndjson",
+			QueryPath: "format",
+		},
 		&requestflag.Flag[int64]{
 			Name:      "limit",
 			Usage:     "Maximum results",

@@ -18,6 +18,7 @@ func TestOptimizeCreate(t *testing.T) {
 			"--waypoint", "{lat: 48.8566, lng: 2.3522}",
 			"--waypoint", "{lat: 48.8606, lng: 2.3376}",
 			"--waypoint", "{lat: 48.8584, lng: 2.2945}",
+			"--format", "format",
 			"--mode", "auto",
 			"--roundtrip=false",
 		)
@@ -38,6 +39,7 @@ func TestOptimizeCreate(t *testing.T) {
 			"--waypoint.lng", "2.3376",
 			"--waypoint.lat", "48.8584",
 			"--waypoint.lng", "2.2945",
+			"--format", "format",
 			"--mode", "auto",
 			"--roundtrip=false",
 		)
@@ -59,6 +61,7 @@ func TestOptimizeCreate(t *testing.T) {
 			t, pipeData,
 			"--api-key", "string",
 			"optimize", "create",
+			"--format", "format",
 		)
 	})
 }

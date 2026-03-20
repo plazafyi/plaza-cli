@@ -17,6 +17,7 @@ func TestElevationBatch(t *testing.T) {
 			"elevation", "batch",
 			"--coordinate", "{lat: 48.8566, lng: 2.3522}",
 			"--coordinate", "{lat: 45.764, lng: 4.8357}",
+			"--format", "format",
 		)
 	})
 
@@ -33,6 +34,7 @@ func TestElevationBatch(t *testing.T) {
 			"--coordinate.lng", "2.3522",
 			"--coordinate.lat", "45.764",
 			"--coordinate.lng", "4.8357",
+			"--format", "format",
 		)
 	})
 
@@ -48,6 +50,7 @@ func TestElevationBatch(t *testing.T) {
 			t, pipeData,
 			"--api-key", "string",
 			"elevation", "batch",
+			"--format", "format",
 		)
 	})
 }
@@ -58,6 +61,7 @@ func TestElevationLookup(t *testing.T) {
 			t,
 			"--api-key", "string",
 			"elevation", "lookup",
+			"--format", "format",
 			"--lat", "0",
 			"--lng", "0",
 			"--locations", "locations",
@@ -74,6 +78,7 @@ func TestElevationLookupPost(t *testing.T) {
 			t,
 			"--api-key", "string",
 			"elevation", "lookup-post",
+			"--format", "format",
 			"--lat", "0",
 			"--lng", "0",
 			"--locations", "locations",

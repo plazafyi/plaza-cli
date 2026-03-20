@@ -247,6 +247,11 @@ var elementsQuery = cli.Command{
 			QueryPath: "cursor",
 		},
 		&requestflag.Flag[string]{
+			Name:      "format",
+			Usage:     "Response format. json (default) returns paginated GeoJSON. geojson/csv/ndjson stream via chunked transfer encoding.",
+			QueryPath: "format",
+		},
+		&requestflag.Flag[string]{
 			Name:      "h3",
 			Usage:     "Legacy shorthand. H3 cell index. Use spatial predicates instead.",
 			QueryPath: "h3",
@@ -355,6 +360,11 @@ var elementsQueryPost = cli.Command{
 			Name:      "cursor",
 			Usage:     "Cursor for pagination",
 			QueryPath: "cursor",
+		},
+		&requestflag.Flag[string]{
+			Name:      "format",
+			Usage:     "Response format. json (default) returns paginated GeoJSON. geojson/csv/ndjson stream via chunked transfer encoding.",
+			QueryPath: "format",
 		},
 		&requestflag.Flag[string]{
 			Name:      "h3",
