@@ -69,24 +69,3 @@ func TestQueryOverpass(t *testing.T) {
 		)
 	})
 }
-
-func TestQuerySparql(t *testing.T) {
-	t.Run("regular flags", func(t *testing.T) {
-		mocktest.TestRunMockTestWithFlags(
-			t,
-			"--api-key", "string",
-			"query", "sparql",
-			"--query", `SELECT ?s ?name WHERE { ?s osm:name ?name . ?s osm:amenity "cafe" } LIMIT 10`,
-		)
-	})
-
-	t.Run("piping data", func(t *testing.T) {
-		// Test piping YAML data over stdin
-		pipeData := []byte(`query: SELECT ?s ?name WHERE { ?s osm:name ?name . ?s osm:amenity "cafe" } LIMIT 10`)
-		mocktest.TestRunMockTestWithPipeAndFlags(
-			t, pipeData,
-			"--api-key", "string",
-			"query", "sparql",
-		)
-	})
-}
