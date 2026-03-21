@@ -178,7 +178,6 @@ func init() {
 				Commands: []*cli.Command{
 					&queryExecute,
 					&queryOverpass,
-					&querySparql,
 				},
 			},
 			{
