@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/plazafyi/plaza-cli/internal/mocktest"
-	"github.com/plazafyi/plaza-cli/internal/requestflag"
 )
 
 func TestQueryExecute(t *testing.T) {
@@ -15,56 +14,21 @@ func TestQueryExecute(t *testing.T) {
 			t,
 			"--api-key", "string",
 			"query", "execute",
-			"--step", "{type: overpass, query: query}",
-		)
-	})
-
-	t.Run("inner flags", func(t *testing.T) {
-		// Check that inner flags have been set up correctly
-		requestflag.CheckInnerFlags(queryExecute)
-
-		// Alternative argument passing style using inner flags
-		mocktest.TestRunMockTestWithFlags(
-			t,
-			"--api-key", "string",
-			"query", "execute",
-			"--step.type", "overpass",
-			"--step.query", "query",
-		)
-	})
-
-	t.Run("piping data", func(t *testing.T) {
-		// Test piping YAML data over stdin
-		pipeData := []byte("" +
-			"steps:\n" +
-			"  - type: overpass\n" +
-			"    query: query\n")
-		mocktest.TestRunMockTestWithPipeAndFlags(
-			t, pipeData,
-			"--api-key", "string",
-			"query", "execute",
-		)
-	})
-}
-
-func TestQueryOverpass(t *testing.T) {
-	t.Run("regular flags", func(t *testing.T) {
-		mocktest.TestRunMockTestWithFlags(
-			t,
-			"--api-key", "string",
-			"query", "overpass",
-			"--data", "[out:json];node[amenity=cafe](around:500,48.8566,2.3522);out body;",
+			"--data", `$$ = search(node, amenity: "cafe").around(distance: 500, geometry: point(48.8566, 2.3522));`,
 			"--format", "format",
 		)
 	})
 
 	t.Run("piping data", func(t *testing.T) {
 		// Test piping YAML data over stdin
-		pipeData := []byte("data: '[out:json];node[amenity=cafe](around:500,48.8566,2.3522);out body;'")
+		pipeData := []byte("" +
+			"data: >-\n" +
+			"  $$ = search(node, amenity: \"cafe\").around(distance: 500, geometry:\n" +
+			"  point(48.8566, 2.3522));\n")
 		mocktest.TestRunMockTestWithPipeAndFlags(
 			t, pipeData,
 			"--api-key", "string",
-			"query", "overpass",
+			"query", "execute",
 			"--format", "format",
 		)
 	})

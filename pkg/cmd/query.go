@@ -15,43 +15,14 @@ import (
 	"github.com/urfave/cli/v3"
 )
 
-var queryExecute = requestflag.WithInnerFlags(cli.Command{
+var queryExecute = cli.Command{
 	Name:    "execute",
-	Usage:   "Execute a multi-step query pipeline",
-	Suggest: true,
-	Flags: []cli.Flag{
-		&requestflag.Flag[[]map[string]any]{
-			Name:     "step",
-			Usage:    "Ordered list of query steps to execute",
-			Required: true,
-			BodyPath: "steps",
-		},
-	},
-	Action:          handleQueryExecute,
-	HideHelpCommand: true,
-}, map[string][]requestflag.HasOuterFlag{
-	"step": {
-		&requestflag.InnerFlag[string]{
-			Name:       "step.type",
-			Usage:      "Step type: `overpass`, `filter`, or `transform`",
-			InnerField: "type",
-		},
-		&requestflag.InnerFlag[string]{
-			Name:       "step.query",
-			Usage:      "Query string for this step (required for overpass steps)",
-			InnerField: "query",
-		},
-	},
-})
-
-var queryOverpass = cli.Command{
-	Name:    "overpass",
-	Usage:   "Execute an Overpass QL query",
+	Usage:   "Execute a PlazaQL query",
 	Suggest: true,
 	Flags: []cli.Flag{
 		&requestflag.Flag[string]{
 			Name:     "data",
-			Usage:    "Overpass QL query string",
+			Usage:    "PlazaQL query string",
 			Required: true,
 			BodyPath: "data",
 		},
@@ -61,7 +32,7 @@ var queryOverpass = cli.Command{
 			QueryPath: "format",
 		},
 	},
-	Action:          handleQueryOverpass,
+	Action:          handleQueryExecute,
 	HideHelpCommand: true,
 }
 
@@ -97,38 +68,4 @@ func handleQueryExecute(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	transform := cmd.Root().String("transform")
 	return ShowJSON(os.Stdout, "query execute", obj, format, transform)
-}
-
-func handleQueryOverpass(ctx context.Context, cmd *cli.Command) error {
-	client := githubcomplazafyiplazago.NewClient(getDefaultRequestOptions(cmd)...)
-	unusedArgs := cmd.Args().Slice()
-
-	if len(unusedArgs) > 0 {
-		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
-	}
-
-	params := githubcomplazafyiplazago.QueryOverpassParams{}
-
-	options, err := flagOptions(
-		cmd,
-		apiquery.NestedQueryFormatBrackets,
-		apiquery.ArrayQueryFormatComma,
-		ApplicationJSON,
-		false,
-	)
-	if err != nil {
-		return err
-	}
-
-	var res []byte
-	options = append(options, option.WithResponseBodyInto(&res))
-	_, err = client.Query.Overpass(ctx, params, options...)
-	if err != nil {
-		return err
-	}
-
-	obj := gjson.ParseBytes(res)
-	format := cmd.Root().String("format")
-	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "query overpass", obj, format, transform)
 }

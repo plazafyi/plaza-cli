@@ -177,7 +177,6 @@ func init() {
 				Suggest:  true,
 				Commands: []*cli.Command{
 					&queryExecute,
-					&queryOverpass,
 				},
 			},
 			{
