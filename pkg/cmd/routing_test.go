@@ -18,6 +18,7 @@ func TestRoutingIsochrone(t *testing.T) {
 			"--lat", "0",
 			"--lng", "0",
 			"--time", "0",
+			"--format", "format",
 			"--mode", "mode",
 			"--output-fields", "output[fields]",
 			"--output-geometry=true",
@@ -37,6 +38,7 @@ func TestRoutingIsochronePost(t *testing.T) {
 			"--lat", "0",
 			"--lng", "0",
 			"--time", "0",
+			"--format", "format",
 			"--mode", "mode",
 			"--output-fields", "output[fields]",
 			"--output-geometry=true",
@@ -145,6 +147,7 @@ func TestRoutingRoute(t *testing.T) {
 			"routing", "route",
 			"--destination", "{lat: 48.8584, lng: 2.2945}",
 			"--origin", "{lat: 48.8566, lng: 2.3522}",
+			"--format", "format",
 			"--alternatives", "0",
 			"--annotations=true",
 			"--depart-at", "'2019-12-27T18:11:19.117Z'",
@@ -172,6 +175,7 @@ func TestRoutingRoute(t *testing.T) {
 			"--destination.lng", "2.2945",
 			"--origin.lat", "48.8566",
 			"--origin.lng", "2.3522",
+			"--format", "format",
 			"--alternatives", "0",
 			"--annotations=true",
 			"--depart-at", "'2019-12-27T18:11:19.117Z'",
@@ -223,6 +227,7 @@ func TestRoutingRoute(t *testing.T) {
 			t, pipeData,
 			"--api-key", "string",
 			"routing", "route",
+			"--format", "format",
 		)
 	})
 }

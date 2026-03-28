@@ -26,6 +26,11 @@ var elevationBatch = requestflag.WithInnerFlags(cli.Command{
 			Required: true,
 			BodyPath: "coordinates",
 		},
+		&requestflag.Flag[string]{
+			Name:      "format",
+			Usage:     "Response format: json (default), geojson, csv, ndjson",
+			QueryPath: "format",
+		},
 	},
 	Action:          handleElevationBatch,
 	HideHelpCommand: true,
@@ -49,6 +54,11 @@ var elevationLookup = cli.Command{
 	Usage:   "Look up elevation at one or more points",
 	Suggest: true,
 	Flags: []cli.Flag{
+		&requestflag.Flag[string]{
+			Name:      "format",
+			Usage:     "Response format: json (default), geojson, csv, ndjson",
+			QueryPath: "format",
+		},
 		&requestflag.Flag[float64]{
 			Name:      "lat",
 			Usage:     "Latitude (single point)",
@@ -89,6 +99,11 @@ var elevationLookupPost = cli.Command{
 	Usage:   "Look up elevation at one or more points",
 	Suggest: true,
 	Flags: []cli.Flag{
+		&requestflag.Flag[string]{
+			Name:      "format",
+			Usage:     "Response format: json (default), geojson, csv, ndjson",
+			QueryPath: "format",
+		},
 		&requestflag.Flag[float64]{
 			Name:      "lat",
 			Usage:     "Latitude (single point)",
