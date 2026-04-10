@@ -198,7 +198,7 @@ var routingRoute = requestflag.WithInnerFlags(cli.Command{
 			Usage:    "Departure time for traffic-aware routing (ISO 8601)",
 			BodyPath: "depart_at",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[map[string]any]{
 			Name:     "ev",
 			Usage:    "Electric vehicle parameters for EV-aware routing",
 			BodyPath: "ev",
