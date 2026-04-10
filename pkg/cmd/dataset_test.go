@@ -20,6 +20,7 @@ func TestDatasetsCreate(t *testing.T) {
 			"--description", "description",
 			"--license", "license",
 			"--source-url", "https://example.com",
+			"--strict-mode=true",
 		)
 	})
 
@@ -31,7 +32,8 @@ func TestDatasetsCreate(t *testing.T) {
 			"attribution: attribution\n" +
 			"description: description\n" +
 			"license: license\n" +
-			"source_url: https://example.com\n")
+			"source_url: https://example.com\n" +
+			"strict_mode: true\n")
 		mocktest.TestRunMockTestWithPipeAndFlags(
 			t, pipeData,
 			"--api-key", "string",
@@ -57,6 +59,7 @@ func TestDatasetsList(t *testing.T) {
 			t,
 			"--api-key", "string",
 			"datasets", "list",
+			"--scope", "scope",
 		)
 	})
 }
@@ -68,28 +71,6 @@ func TestDatasetsDelete(t *testing.T) {
 			"--api-key", "string",
 			"datasets", "delete",
 			"--id", "id",
-		)
-	})
-}
-
-func TestDatasetsFeatures(t *testing.T) {
-	t.Run("regular flags", func(t *testing.T) {
-		mocktest.TestRunMockTestWithFlags(
-			t,
-			"--api-key", "string",
-			"datasets", "features",
-			"--id", "id",
-			"--cursor", "cursor",
-			"--format", "format",
-			"--limit", "0",
-			"--output-buffer", "0",
-			"--output-centroid=true",
-			"--output-fields", "output[fields]",
-			"--output-geometry=true",
-			"--output-include", "output[include]",
-			"--output-precision", "0",
-			"--output-simplify", "0",
-			"--output-sort", "output[sort]",
 		)
 	})
 }

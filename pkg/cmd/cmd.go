@@ -85,17 +85,13 @@ func init() {
 		},
 		Commands: []*cli.Command{
 			{
-				Name:     "elements",
+				Name:     "features",
 				Category: "API RESOURCE",
 				Suggest:  true,
 				Commands: []*cli.Command{
-					&elementsRetrieve,
-					&elementsBatch,
-					&elementsLookup,
-					&elementsNearby,
-					&elementsNearbyPost,
-					&elementsQuery,
-					&elementsQueryPost,
+					&featuresRetrieve,
+					&featuresBatch,
+					&featuresQuery,
 				},
 			},
 			{
@@ -107,7 +103,6 @@ func init() {
 					&datasetsRetrieve,
 					&datasetsList,
 					&datasetsDelete,
-					&datasetsFeatures,
 				},
 			},
 			{
@@ -116,12 +111,9 @@ func init() {
 				Suggest:  true,
 				Commands: []*cli.Command{
 					&geocodeAutocomplete,
-					&geocodeAutocompletePost,
 					&geocodeBatch,
 					&geocodeForward,
-					&geocodeForwardPost,
 					&geocodeReverse,
-					&geocodeReversePost,
 				},
 			},
 			{
@@ -130,7 +122,6 @@ func init() {
 				Suggest:  true,
 				Commands: []*cli.Command{
 					&searchQuery,
-					&searchQueryPost,
 				},
 			},
 			{
@@ -139,10 +130,8 @@ func init() {
 				Suggest:  true,
 				Commands: []*cli.Command{
 					&routingIsochrone,
-					&routingIsochronePost,
 					&routingMatrix,
 					&routingNearest,
-					&routingNearestPost,
 					&routingRoute,
 				},
 			},
@@ -151,9 +140,7 @@ func init() {
 				Category: "API RESOURCE",
 				Suggest:  true,
 				Commands: []*cli.Command{
-					&elevationBatch,
 					&elevationLookup,
-					&elevationLookupPost,
 					&elevationProfile,
 				},
 			},

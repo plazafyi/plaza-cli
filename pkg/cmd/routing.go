@@ -15,28 +15,22 @@ import (
 	"github.com/urfave/cli/v3"
 )
 
-var routingIsochrone = cli.Command{
+var routingIsochrone = requestflag.WithInnerFlags(cli.Command{
 	Name:    "isochrone",
 	Usage:   "Calculate an isochrone from a point",
 	Suggest: true,
 	Flags: []cli.Flag{
-		&requestflag.Flag[float64]{
-			Name:      "lat",
-			Usage:     "Latitude",
-			Required:  true,
-			QueryPath: "lat",
+		&requestflag.Flag[map[string]any]{
+			Name:     "geometry",
+			Usage:    "GeoJSON Point geometry per RFC 7946. Coordinates use [longitude, latitude] order. Optional third element is altitude in meters.",
+			Required: true,
+			BodyPath: "geometry",
 		},
-		&requestflag.Flag[float64]{
-			Name:      "lng",
-			Usage:     "Longitude",
-			Required:  true,
-			QueryPath: "lng",
-		},
-		&requestflag.Flag[float64]{
-			Name:      "time",
-			Usage:     "Travel time in seconds (1-7200)",
-			Required:  true,
-			QueryPath: "time",
+		&requestflag.Flag[[]int64]{
+			Name:     "time",
+			Usage:    "Travel time budgets in seconds. Each value produces one contour polygon.",
+			Required: true,
+			BodyPath: "time",
 		},
 		&requestflag.Flag[string]{
 			Name:      "format",
@@ -44,102 +38,28 @@ var routingIsochrone = cli.Command{
 			QueryPath: "format",
 		},
 		&requestflag.Flag[string]{
-			Name:      "mode",
-			Usage:     "Travel mode (auto, foot, bicycle)",
-			QueryPath: "mode",
-		},
-		&requestflag.Flag[string]{
-			Name:      "output-fields",
-			Usage:     "Comma-separated property fields to include",
-			QueryPath: "output[fields]",
-		},
-		&requestflag.Flag[bool]{
-			Name:      "output-geometry",
-			Usage:     "Include geometry (default true)",
-			QueryPath: "output[geometry]",
-		},
-		&requestflag.Flag[string]{
-			Name:      "output-include",
-			Usage:     "Extra computed fields: bbox, center",
-			QueryPath: "output[include]",
-		},
-		&requestflag.Flag[int64]{
-			Name:      "output-precision",
-			Usage:     "Coordinate decimal precision (1-15, default 7)",
-			QueryPath: "output[precision]",
-		},
-		&requestflag.Flag[float64]{
-			Name:      "output-simplify",
-			Usage:     "Simplify geometry tolerance in meters",
-			QueryPath: "output[simplify]",
+			Name:     "mode",
+			Usage:    "Travel mode (default: `auto`)",
+			Default:  "auto",
+			BodyPath: "mode",
 		},
 	},
 	Action:          handleRoutingIsochrone,
 	HideHelpCommand: true,
-}
-
-var routingIsochronePost = cli.Command{
-	Name:    "isochrone-post",
-	Usage:   "Calculate an isochrone from a point",
-	Suggest: true,
-	Flags: []cli.Flag{
-		&requestflag.Flag[float64]{
-			Name:      "lat",
-			Usage:     "Latitude",
-			Required:  true,
-			QueryPath: "lat",
+}, map[string][]requestflag.HasOuterFlag{
+	"geometry": {
+		&requestflag.InnerFlag[[]float64]{
+			Name:       "geometry.coordinates",
+			Usage:      "[longitude, latitude] or [longitude, latitude, altitude]",
+			InnerField: "coordinates",
 		},
-		&requestflag.Flag[float64]{
-			Name:      "lng",
-			Usage:     "Longitude",
-			Required:  true,
-			QueryPath: "lng",
-		},
-		&requestflag.Flag[float64]{
-			Name:      "time",
-			Usage:     "Travel time in seconds (1-7200)",
-			Required:  true,
-			QueryPath: "time",
-		},
-		&requestflag.Flag[string]{
-			Name:      "format",
-			Usage:     "Response format: json (default), geojson, csv, ndjson",
-			QueryPath: "format",
-		},
-		&requestflag.Flag[string]{
-			Name:      "mode",
-			Usage:     "Travel mode (auto, foot, bicycle)",
-			QueryPath: "mode",
-		},
-		&requestflag.Flag[string]{
-			Name:      "output-fields",
-			Usage:     "Comma-separated property fields to include",
-			QueryPath: "output[fields]",
-		},
-		&requestflag.Flag[bool]{
-			Name:      "output-geometry",
-			Usage:     "Include geometry (default true)",
-			QueryPath: "output[geometry]",
-		},
-		&requestflag.Flag[string]{
-			Name:      "output-include",
-			Usage:     "Extra computed fields: bbox, center",
-			QueryPath: "output[include]",
-		},
-		&requestflag.Flag[int64]{
-			Name:      "output-precision",
-			Usage:     "Coordinate decimal precision (1-15, default 7)",
-			QueryPath: "output[precision]",
-		},
-		&requestflag.Flag[float64]{
-			Name:      "output-simplify",
-			Usage:     "Simplify geometry tolerance in meters",
-			QueryPath: "output[simplify]",
+		&requestflag.InnerFlag[string]{
+			Name:       "geometry.type",
+			Usage:      `Allowed values: "Point".`,
+			InnerField: "type",
 		},
 	},
-	Action:          handleRoutingIsochronePost,
-	HideHelpCommand: true,
-}
+})
 
 var routingMatrix = requestflag.WithInnerFlags(cli.Command{
 	Name:    "matrix",
@@ -148,13 +68,13 @@ var routingMatrix = requestflag.WithInnerFlags(cli.Command{
 	Flags: []cli.Flag{
 		&requestflag.Flag[[]map[string]any]{
 			Name:     "destination",
-			Usage:    "Array of destination coordinates (max 50)",
+			Usage:    "Array of destination coordinates as GeoJSON Points (max 50)",
 			Required: true,
 			BodyPath: "destinations",
 		},
 		&requestflag.Flag[[]map[string]any]{
 			Name:     "origin",
-			Usage:    "Array of origin coordinates (max 50)",
+			Usage:    "Array of origin coordinates as GeoJSON Points (max 50)",
 			Required: true,
 			BodyPath: "origins",
 		},
@@ -180,114 +100,64 @@ var routingMatrix = requestflag.WithInnerFlags(cli.Command{
 	HideHelpCommand: true,
 }, map[string][]requestflag.HasOuterFlag{
 	"destination": {
-		&requestflag.InnerFlag[float64]{
-			Name:       "destination.lat",
-			Usage:      "Latitude in decimal degrees (-90 to 90)",
-			InnerField: "lat",
+		&requestflag.InnerFlag[[]float64]{
+			Name:       "destination.coordinates",
+			Usage:      "[longitude, latitude] or [longitude, latitude, altitude]",
+			InnerField: "coordinates",
 		},
-		&requestflag.InnerFlag[float64]{
-			Name:       "destination.lng",
-			Usage:      "Longitude in decimal degrees (-180 to 180)",
-			InnerField: "lng",
+		&requestflag.InnerFlag[string]{
+			Name:       "destination.type",
+			Usage:      `Allowed values: "Point".`,
+			InnerField: "type",
 		},
 	},
 	"origin": {
-		&requestflag.InnerFlag[float64]{
-			Name:       "origin.lat",
-			Usage:      "Latitude in decimal degrees (-90 to 90)",
-			InnerField: "lat",
+		&requestflag.InnerFlag[[]float64]{
+			Name:       "origin.coordinates",
+			Usage:      "[longitude, latitude] or [longitude, latitude, altitude]",
+			InnerField: "coordinates",
 		},
-		&requestflag.InnerFlag[float64]{
-			Name:       "origin.lng",
-			Usage:      "Longitude in decimal degrees (-180 to 180)",
-			InnerField: "lng",
+		&requestflag.InnerFlag[string]{
+			Name:       "origin.type",
+			Usage:      `Allowed values: "Point".`,
+			InnerField: "type",
 		},
 	},
 })
 
-var routingNearest = cli.Command{
+var routingNearest = requestflag.WithInnerFlags(cli.Command{
 	Name:    "nearest",
 	Usage:   "Snap a coordinate to the nearest road",
 	Suggest: true,
 	Flags: []cli.Flag{
-		&requestflag.Flag[float64]{
-			Name:      "lat",
-			Usage:     "Latitude",
-			Required:  true,
-			QueryPath: "lat",
+		&requestflag.Flag[map[string]any]{
+			Name:     "geometry",
+			Usage:    "GeoJSON Point geometry per RFC 7946. Coordinates use [longitude, latitude] order. Optional third element is altitude in meters.",
+			Required: true,
+			BodyPath: "geometry",
 		},
-		&requestflag.Flag[float64]{
-			Name:      "lng",
-			Usage:     "Longitude",
-			Required:  true,
-			QueryPath: "lng",
-		},
-		&requestflag.Flag[string]{
-			Name:      "output-fields",
-			Usage:     "Comma-separated property fields to include",
-			QueryPath: "output[fields]",
-		},
-		&requestflag.Flag[string]{
-			Name:      "output-include",
-			Usage:     "Extra computed fields: bbox, distance, center",
-			QueryPath: "output[include]",
-		},
-		&requestflag.Flag[int64]{
-			Name:      "output-precision",
-			Usage:     "Coordinate decimal precision (1-15, default 7)",
-			QueryPath: "output[precision]",
-		},
-		&requestflag.Flag[int64]{
-			Name:      "radius",
-			Usage:     "Search radius in meters (default 500, max 5000)",
-			QueryPath: "radius",
+		&requestflag.Flag[any]{
+			Name:     "radius",
+			Usage:    "Maximum search radius in meters (default: 100)",
+			BodyPath: "radius",
 		},
 	},
 	Action:          handleRoutingNearest,
 	HideHelpCommand: true,
-}
-
-var routingNearestPost = cli.Command{
-	Name:    "nearest-post",
-	Usage:   "Snap a coordinate to the nearest road",
-	Suggest: true,
-	Flags: []cli.Flag{
-		&requestflag.Flag[float64]{
-			Name:      "lat",
-			Usage:     "Latitude",
-			Required:  true,
-			QueryPath: "lat",
+}, map[string][]requestflag.HasOuterFlag{
+	"geometry": {
+		&requestflag.InnerFlag[[]float64]{
+			Name:       "geometry.coordinates",
+			Usage:      "[longitude, latitude] or [longitude, latitude, altitude]",
+			InnerField: "coordinates",
 		},
-		&requestflag.Flag[float64]{
-			Name:      "lng",
-			Usage:     "Longitude",
-			Required:  true,
-			QueryPath: "lng",
-		},
-		&requestflag.Flag[string]{
-			Name:      "output-fields",
-			Usage:     "Comma-separated property fields to include",
-			QueryPath: "output[fields]",
-		},
-		&requestflag.Flag[string]{
-			Name:      "output-include",
-			Usage:     "Extra computed fields: bbox, distance, center",
-			QueryPath: "output[include]",
-		},
-		&requestflag.Flag[int64]{
-			Name:      "output-precision",
-			Usage:     "Coordinate decimal precision (1-15, default 7)",
-			QueryPath: "output[precision]",
-		},
-		&requestflag.Flag[int64]{
-			Name:      "radius",
-			Usage:     "Search radius in meters (default 500, max 5000)",
-			QueryPath: "radius",
+		&requestflag.InnerFlag[string]{
+			Name:       "geometry.type",
+			Usage:      `Allowed values: "Point".`,
+			InnerField: "type",
 		},
 	},
-	Action:          handleRoutingNearestPost,
-	HideHelpCommand: true,
-}
+})
 
 var routingRoute = requestflag.WithInnerFlags(cli.Command{
 	Name:    "route",
@@ -296,13 +166,13 @@ var routingRoute = requestflag.WithInnerFlags(cli.Command{
 	Flags: []cli.Flag{
 		&requestflag.Flag[map[string]any]{
 			Name:     "destination",
-			Usage:    "Geographic coordinate as a JSON object with `lat` and `lng` fields.",
+			Usage:    "GeoJSON Point geometry per RFC 7946. Coordinates use [longitude, latitude] order. Optional third element is altitude in meters.",
 			Required: true,
 			BodyPath: "destination",
 		},
 		&requestflag.Flag[map[string]any]{
 			Name:     "origin",
-			Usage:    "Geographic coordinate as a JSON object with `lat` and `lng` fields.",
+			Usage:    "GeoJSON Point geometry per RFC 7946. Coordinates use [longitude, latitude] order. Optional third element is altitude in meters.",
 			Required: true,
 			BodyPath: "origin",
 		},
@@ -377,27 +247,27 @@ var routingRoute = requestflag.WithInnerFlags(cli.Command{
 	HideHelpCommand: true,
 }, map[string][]requestflag.HasOuterFlag{
 	"destination": {
-		&requestflag.InnerFlag[float64]{
-			Name:       "destination.lat",
-			Usage:      "Latitude in decimal degrees (-90 to 90)",
-			InnerField: "lat",
+		&requestflag.InnerFlag[[]float64]{
+			Name:       "destination.coordinates",
+			Usage:      "[longitude, latitude] or [longitude, latitude, altitude]",
+			InnerField: "coordinates",
 		},
-		&requestflag.InnerFlag[float64]{
-			Name:       "destination.lng",
-			Usage:      "Longitude in decimal degrees (-180 to 180)",
-			InnerField: "lng",
+		&requestflag.InnerFlag[string]{
+			Name:       "destination.type",
+			Usage:      `Allowed values: "Point".`,
+			InnerField: "type",
 		},
 	},
 	"origin": {
-		&requestflag.InnerFlag[float64]{
-			Name:       "origin.lat",
-			Usage:      "Latitude in decimal degrees (-90 to 90)",
-			InnerField: "lat",
+		&requestflag.InnerFlag[[]float64]{
+			Name:       "origin.coordinates",
+			Usage:      "[longitude, latitude] or [longitude, latitude, altitude]",
+			InnerField: "coordinates",
 		},
-		&requestflag.InnerFlag[float64]{
-			Name:       "origin.lng",
-			Usage:      "Longitude in decimal degrees (-180 to 180)",
-			InnerField: "lng",
+		&requestflag.InnerFlag[string]{
+			Name:       "origin.type",
+			Usage:      `Allowed values: "Point".`,
+			InnerField: "type",
 		},
 	},
 	"ev": {
@@ -428,15 +298,15 @@ var routingRoute = requestflag.WithInnerFlags(cli.Command{
 		},
 	},
 	"waypoint": {
-		&requestflag.InnerFlag[float64]{
-			Name:       "waypoint.lat",
-			Usage:      "Latitude in decimal degrees (-90 to 90)",
-			InnerField: "lat",
+		&requestflag.InnerFlag[[]float64]{
+			Name:       "waypoint.coordinates",
+			Usage:      "[longitude, latitude] or [longitude, latitude, altitude]",
+			InnerField: "coordinates",
 		},
-		&requestflag.InnerFlag[float64]{
-			Name:       "waypoint.lng",
-			Usage:      "Longitude in decimal degrees (-180 to 180)",
-			InnerField: "lng",
+		&requestflag.InnerFlag[string]{
+			Name:       "waypoint.type",
+			Usage:      `Allowed values: "Point".`,
+			InnerField: "type",
 		},
 	},
 })
@@ -455,7 +325,7 @@ func handleRoutingIsochrone(ctx context.Context, cmd *cli.Command) error {
 		cmd,
 		apiquery.NestedQueryFormatBrackets,
 		apiquery.ArrayQueryFormatComma,
-		EmptyBody,
+		ApplicationJSON,
 		false,
 	)
 	if err != nil {
@@ -473,40 +343,6 @@ func handleRoutingIsochrone(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	transform := cmd.Root().String("transform")
 	return ShowJSON(os.Stdout, "routing isochrone", obj, format, transform)
-}
-
-func handleRoutingIsochronePost(ctx context.Context, cmd *cli.Command) error {
-	client := githubcomplazafyiplazago.NewClient(getDefaultRequestOptions(cmd)...)
-	unusedArgs := cmd.Args().Slice()
-
-	if len(unusedArgs) > 0 {
-		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
-	}
-
-	params := githubcomplazafyiplazago.RoutingIsochronePostParams{}
-
-	options, err := flagOptions(
-		cmd,
-		apiquery.NestedQueryFormatBrackets,
-		apiquery.ArrayQueryFormatComma,
-		EmptyBody,
-		false,
-	)
-	if err != nil {
-		return err
-	}
-
-	var res []byte
-	options = append(options, option.WithResponseBodyInto(&res))
-	_, err = client.Routing.IsochronePost(ctx, params, options...)
-	if err != nil {
-		return err
-	}
-
-	obj := gjson.ParseBytes(res)
-	format := cmd.Root().String("format")
-	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "routing isochrone-post", obj, format, transform)
 }
 
 func handleRoutingMatrix(ctx context.Context, cmd *cli.Command) error {
@@ -557,7 +393,7 @@ func handleRoutingNearest(ctx context.Context, cmd *cli.Command) error {
 		cmd,
 		apiquery.NestedQueryFormatBrackets,
 		apiquery.ArrayQueryFormatComma,
-		EmptyBody,
+		ApplicationJSON,
 		false,
 	)
 	if err != nil {
@@ -575,40 +411,6 @@ func handleRoutingNearest(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	transform := cmd.Root().String("transform")
 	return ShowJSON(os.Stdout, "routing nearest", obj, format, transform)
-}
-
-func handleRoutingNearestPost(ctx context.Context, cmd *cli.Command) error {
-	client := githubcomplazafyiplazago.NewClient(getDefaultRequestOptions(cmd)...)
-	unusedArgs := cmd.Args().Slice()
-
-	if len(unusedArgs) > 0 {
-		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
-	}
-
-	params := githubcomplazafyiplazago.RoutingNearestPostParams{}
-
-	options, err := flagOptions(
-		cmd,
-		apiquery.NestedQueryFormatBrackets,
-		apiquery.ArrayQueryFormatComma,
-		EmptyBody,
-		false,
-	)
-	if err != nil {
-		return err
-	}
-
-	var res []byte
-	options = append(options, option.WithResponseBodyInto(&res))
-	_, err = client.Routing.NearestPost(ctx, params, options...)
-	if err != nil {
-		return err
-	}
-
-	obj := gjson.ParseBytes(res)
-	format := cmd.Root().String("format")
-	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "routing nearest-post", obj, format, transform)
 }
 
 func handleRoutingRoute(ctx context.Context, cmd *cli.Command) error {

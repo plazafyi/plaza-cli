@@ -20,31 +20,31 @@ var mapMatchMatch = requestflag.WithInnerFlags(cli.Command{
 	Usage:   "Match GPS coordinates to the road network",
 	Suggest: true,
 	Flags: []cli.Flag{
-		&requestflag.Flag[[]map[string]any]{
-			Name:     "coordinate",
-			Usage:    "GPS coordinates to match, in order of travel (max 50 points)",
+		&requestflag.Flag[map[string]any]{
+			Name:     "geometry",
+			Usage:    "GeoJSON LineString geometry per RFC 7946. An ordered sequence of two or more positions.",
 			Required: true,
-			BodyPath: "coordinates",
+			BodyPath: "geometry",
 		},
 		&requestflag.Flag[any]{
 			Name:     "radius",
-			Usage:    "Search radius per coordinate in meters. Must have the same length as `coordinates` or be omitted entirely. Default: 50m per point.",
+			Usage:    "Search radius per coordinate in meters. Must have the same length as the geometry coordinates or be omitted entirely. Default: 50m per point.",
 			BodyPath: "radiuses",
 		},
 	},
 	Action:          handleMapMatchMatch,
 	HideHelpCommand: true,
 }, map[string][]requestflag.HasOuterFlag{
-	"coordinate": {
-		&requestflag.InnerFlag[float64]{
-			Name:       "coordinate.lat",
-			Usage:      "Latitude in decimal degrees (-90 to 90)",
-			InnerField: "lat",
+	"geometry": {
+		&requestflag.InnerFlag[[]any]{
+			Name:       "geometry.coordinates",
+			Usage:      "Array of [lng, lat] or [lng, lat, alt] positions",
+			InnerField: "coordinates",
 		},
-		&requestflag.InnerFlag[float64]{
-			Name:       "coordinate.lng",
-			Usage:      "Longitude in decimal degrees (-180 to 180)",
-			InnerField: "lng",
+		&requestflag.InnerFlag[string]{
+			Name:       "geometry.type",
+			Usage:      `Allowed values: "LineString".`,
+			InnerField: "type",
 		},
 	},
 })
