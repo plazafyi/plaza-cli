@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/plazafyi/plaza-cli/internal/mocktest"
+	"github.com/plazafyi/plaza-cli/internal/requestflag"
 )
 
 func TestGeocodeAutocomplete(t *testing.T) {
@@ -14,32 +15,54 @@ func TestGeocodeAutocomplete(t *testing.T) {
 			t,
 			"--api-key", "string",
 			"geocode", "autocomplete",
-			"--q", "q",
-			"--country-code", "country_code",
+			"--q", "221B Bak",
 			"--format", "format",
+			"--country-code", "xx",
+			"--focus", "{coordinates: [2.3522, 48.8566], type: Point}",
 			"--lang", "lang",
-			"--lat", "0",
 			"--layer", "layer",
-			"--limit", "0",
-			"--lng", "0",
+			"--limit", "1",
 		)
 	})
-}
 
-func TestGeocodeAutocompletePost(t *testing.T) {
-	t.Run("regular flags", func(t *testing.T) {
+	t.Run("inner flags", func(t *testing.T) {
+		// Check that inner flags have been set up correctly
+		requestflag.CheckInnerFlags(geocodeAutocomplete)
+
+		// Alternative argument passing style using inner flags
 		mocktest.TestRunMockTestWithFlags(
 			t,
 			"--api-key", "string",
-			"geocode", "autocomplete-post",
-			"--q", "q",
-			"--country-code", "country_code",
+			"geocode", "autocomplete",
+			"--q", "221B Bak",
 			"--format", "format",
+			"--country-code", "xx",
+			"--focus.coordinates", "[2.3522, 48.8566]",
+			"--focus.type", "Point",
 			"--lang", "lang",
-			"--lat", "0",
 			"--layer", "layer",
-			"--limit", "0",
-			"--lng", "0",
+			"--limit", "1",
+		)
+	})
+
+	t.Run("piping data", func(t *testing.T) {
+		// Test piping YAML data over stdin
+		pipeData := []byte("" +
+			"q: 221B Bak\n" +
+			"country_code: xx\n" +
+			"focus:\n" +
+			"  coordinates:\n" +
+			"    - 2.3522\n" +
+			"    - 48.8566\n" +
+			"  type: Point\n" +
+			"lang: lang\n" +
+			"layer: layer\n" +
+			"limit: 1\n")
+		mocktest.TestRunMockTestWithPipeAndFlags(
+			t, pipeData,
+			"--api-key", "string",
+			"geocode", "autocomplete",
+			"--format", "format",
 		)
 	})
 }
@@ -73,34 +96,54 @@ func TestGeocodeForward(t *testing.T) {
 			t,
 			"--api-key", "string",
 			"geocode", "forward",
-			"--q", "q",
-			"--bbox", "bbox",
-			"--country-code", "country_code",
+			"--q", "221B Baker Street, London",
 			"--format", "format",
+			"--country-code", "xx",
+			"--focus", "{coordinates: [2.3522, 48.8566], type: Point}",
 			"--lang", "lang",
-			"--lat", "0",
 			"--layer", "layer",
-			"--limit", "0",
-			"--lng", "0",
+			"--limit", "1",
 		)
 	})
-}
 
-func TestGeocodeForwardPost(t *testing.T) {
-	t.Run("regular flags", func(t *testing.T) {
+	t.Run("inner flags", func(t *testing.T) {
+		// Check that inner flags have been set up correctly
+		requestflag.CheckInnerFlags(geocodeForward)
+
+		// Alternative argument passing style using inner flags
 		mocktest.TestRunMockTestWithFlags(
 			t,
 			"--api-key", "string",
-			"geocode", "forward-post",
-			"--q", "q",
-			"--bbox", "bbox",
-			"--country-code", "country_code",
+			"geocode", "forward",
+			"--q", "221B Baker Street, London",
 			"--format", "format",
+			"--country-code", "xx",
+			"--focus.coordinates", "[2.3522, 48.8566]",
+			"--focus.type", "Point",
 			"--lang", "lang",
-			"--lat", "0",
 			"--layer", "layer",
-			"--limit", "0",
-			"--lng", "0",
+			"--limit", "1",
+		)
+	})
+
+	t.Run("piping data", func(t *testing.T) {
+		// Test piping YAML data over stdin
+		pipeData := []byte("" +
+			"q: 221B Baker Street, London\n" +
+			"country_code: xx\n" +
+			"focus:\n" +
+			"  coordinates:\n" +
+			"    - 2.3522\n" +
+			"    - 48.8566\n" +
+			"  type: Point\n" +
+			"lang: lang\n" +
+			"layer: layer\n" +
+			"limit: 1\n")
+		mocktest.TestRunMockTestWithPipeAndFlags(
+			t, pipeData,
+			"--api-key", "string",
+			"geocode", "forward",
+			"--format", "format",
 		)
 	})
 }
@@ -111,32 +154,48 @@ func TestGeocodeReverse(t *testing.T) {
 			t,
 			"--api-key", "string",
 			"geocode", "reverse",
+			"--geometry", "{coordinates: [2.3522, 48.8566], type: Point}",
 			"--format", "format",
 			"--lang", "lang",
-			"--lat", "0",
-			"--layer", "layer",
-			"--limit", "0",
-			"--lng", "0",
-			"--near", "near",
-			"--radius", "0",
+			"--limit", "1",
+			"--radius", "1",
 		)
 	})
-}
 
-func TestGeocodeReversePost(t *testing.T) {
-	t.Run("regular flags", func(t *testing.T) {
+	t.Run("inner flags", func(t *testing.T) {
+		// Check that inner flags have been set up correctly
+		requestflag.CheckInnerFlags(geocodeReverse)
+
+		// Alternative argument passing style using inner flags
 		mocktest.TestRunMockTestWithFlags(
 			t,
 			"--api-key", "string",
-			"geocode", "reverse-post",
+			"geocode", "reverse",
+			"--geometry.coordinates", "[2.3522, 48.8566]",
+			"--geometry.type", "Point",
 			"--format", "format",
 			"--lang", "lang",
-			"--lat", "0",
-			"--layer", "layer",
-			"--limit", "0",
-			"--lng", "0",
-			"--near", "near",
-			"--radius", "0",
+			"--limit", "1",
+			"--radius", "1",
+		)
+	})
+
+	t.Run("piping data", func(t *testing.T) {
+		// Test piping YAML data over stdin
+		pipeData := []byte("" +
+			"geometry:\n" +
+			"  coordinates:\n" +
+			"    - 2.3522\n" +
+			"    - 48.8566\n" +
+			"  type: Point\n" +
+			"lang: lang\n" +
+			"limit: 1\n" +
+			"radius: 1\n")
+		mocktest.TestRunMockTestWithPipeAndFlags(
+			t, pipeData,
+			"--api-key", "string",
+			"geocode", "reverse",
+			"--format", "format",
 		)
 	})
 }

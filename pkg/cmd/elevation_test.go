@@ -9,31 +9,13 @@ import (
 	"github.com/plazafyi/plaza-cli/internal/requestflag"
 )
 
-func TestElevationBatch(t *testing.T) {
+func TestElevationLookup(t *testing.T) {
 	t.Run("regular flags", func(t *testing.T) {
 		mocktest.TestRunMockTestWithFlags(
 			t,
 			"--api-key", "string",
-			"elevation", "batch",
-			"--coordinate", "{lat: 48.8566, lng: 2.3522}",
-			"--coordinate", "{lat: 45.764, lng: 4.8357}",
-			"--format", "format",
-		)
-	})
-
-	t.Run("inner flags", func(t *testing.T) {
-		// Check that inner flags have been set up correctly
-		requestflag.CheckInnerFlags(elevationBatch)
-
-		// Alternative argument passing style using inner flags
-		mocktest.TestRunMockTestWithFlags(
-			t,
-			"--api-key", "string",
-			"elevation", "batch",
-			"--coordinate.lat", "48.8566",
-			"--coordinate.lng", "2.3522",
-			"--coordinate.lat", "45.764",
-			"--coordinate.lng", "4.8357",
+			"elevation", "lookup",
+			"--geometry", "{coordinates: [2.3522, 48.8566], type: Point}",
 			"--format", "format",
 		)
 	})
@@ -41,50 +23,16 @@ func TestElevationBatch(t *testing.T) {
 	t.Run("piping data", func(t *testing.T) {
 		// Test piping YAML data over stdin
 		pipeData := []byte("" +
-			"coordinates:\n" +
-			"  - lat: 48.8566\n" +
-			"    lng: 2.3522\n" +
-			"  - lat: 45.764\n" +
-			"    lng: 4.8357\n")
+			"geometry:\n" +
+			"  coordinates:\n" +
+			"    - 2.3522\n" +
+			"    - 48.8566\n" +
+			"  type: Point\n")
 		mocktest.TestRunMockTestWithPipeAndFlags(
 			t, pipeData,
 			"--api-key", "string",
-			"elevation", "batch",
-			"--format", "format",
-		)
-	})
-}
-
-func TestElevationLookup(t *testing.T) {
-	t.Run("regular flags", func(t *testing.T) {
-		mocktest.TestRunMockTestWithFlags(
-			t,
-			"--api-key", "string",
 			"elevation", "lookup",
 			"--format", "format",
-			"--lat", "0",
-			"--lng", "0",
-			"--locations", "locations",
-			"--output-fields", "output[fields]",
-			"--output-include", "output[include]",
-			"--output-precision", "0",
-		)
-	})
-}
-
-func TestElevationLookupPost(t *testing.T) {
-	t.Run("regular flags", func(t *testing.T) {
-		mocktest.TestRunMockTestWithFlags(
-			t,
-			"--api-key", "string",
-			"elevation", "lookup-post",
-			"--format", "format",
-			"--lat", "0",
-			"--lng", "0",
-			"--locations", "locations",
-			"--output-fields", "output[fields]",
-			"--output-include", "output[include]",
-			"--output-precision", "0",
 		)
 	})
 }
@@ -95,9 +43,7 @@ func TestElevationProfile(t *testing.T) {
 			t,
 			"--api-key", "string",
 			"elevation", "profile",
-			"--coordinate", "{lat: 48.8566, lng: 2.3522}",
-			"--coordinate", "{lat: 48.858, lng: 2.34}",
-			"--coordinate", "{lat: 48.8584, lng: 2.2945}",
+			"--geometry", "{coordinates: [[2.3522, 48.8566], [2.34, 48.858], [2.2945, 48.8584]], type: LineString}",
 		)
 	})
 
@@ -110,25 +56,23 @@ func TestElevationProfile(t *testing.T) {
 			t,
 			"--api-key", "string",
 			"elevation", "profile",
-			"--coordinate.lat", "48.8566",
-			"--coordinate.lng", "2.3522",
-			"--coordinate.lat", "48.858",
-			"--coordinate.lng", "2.34",
-			"--coordinate.lat", "48.8584",
-			"--coordinate.lng", "2.2945",
+			"--geometry.coordinates", "[[2.3522, 48.8566], [2.34, 48.858], [2.2945, 48.8584]]",
+			"--geometry.type", "LineString",
 		)
 	})
 
 	t.Run("piping data", func(t *testing.T) {
 		// Test piping YAML data over stdin
 		pipeData := []byte("" +
-			"coordinates:\n" +
-			"  - lat: 48.8566\n" +
-			"    lng: 2.3522\n" +
-			"  - lat: 48.858\n" +
-			"    lng: 2.34\n" +
-			"  - lat: 48.8584\n" +
-			"    lng: 2.2945\n")
+			"geometry:\n" +
+			"  coordinates:\n" +
+			"    - - 2.3522\n" +
+			"      - 48.8566\n" +
+			"    - - 2.34\n" +
+			"      - 48.858\n" +
+			"    - - 2.2945\n" +
+			"      - 48.8584\n" +
+			"  type: LineString\n")
 		mocktest.TestRunMockTestWithPipeAndFlags(
 			t, pipeData,
 			"--api-key", "string",

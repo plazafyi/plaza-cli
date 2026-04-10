@@ -54,9 +54,9 @@ plaza [resource] <command> [flags...]
 ```
 
 ```sh
-plaza elements query \
+plaza features query \
   --api-key 'My API Key' \
-  --near 48.8584,2.2945 \
+  --around '{coordinates: [2.2945, 48.8584], type: Point}' \
   --radius 500
 ```
 

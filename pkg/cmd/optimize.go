@@ -20,9 +20,9 @@ var optimizeCreate = requestflag.WithInnerFlags(cli.Command{
 	Usage:   "Optimize route through waypoints",
 	Suggest: true,
 	Flags: []cli.Flag{
-		&requestflag.Flag[[]map[string]any]{
-			Name:     "waypoint",
-			Usage:    "Waypoints to visit in optimized order (2-50 points)",
+		&requestflag.Flag[map[string]any]{
+			Name:     "waypoints",
+			Usage:    "GeoJSON MultiPoint geometry per RFC 7946. An array of positions.",
 			Required: true,
 			BodyPath: "waypoints",
 		},
@@ -47,16 +47,16 @@ var optimizeCreate = requestflag.WithInnerFlags(cli.Command{
 	Action:          handleOptimizeCreate,
 	HideHelpCommand: true,
 }, map[string][]requestflag.HasOuterFlag{
-	"waypoint": {
-		&requestflag.InnerFlag[float64]{
-			Name:       "waypoint.lat",
-			Usage:      "Latitude in decimal degrees (-90 to 90)",
-			InnerField: "lat",
+	"waypoints": {
+		&requestflag.InnerFlag[[]any]{
+			Name:       "waypoints.coordinates",
+			Usage:      "Array of [lng, lat] or [lng, lat, alt] positions",
+			InnerField: "coordinates",
 		},
-		&requestflag.InnerFlag[float64]{
-			Name:       "waypoint.lng",
-			Usage:      "Longitude in decimal degrees (-180 to 180)",
-			InnerField: "lng",
+		&requestflag.InnerFlag[string]{
+			Name:       "waypoints.type",
+			Usage:      `Allowed values: "MultiPoint".`,
+			InnerField: "type",
 		},
 	},
 })
