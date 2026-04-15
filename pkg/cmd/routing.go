@@ -341,8 +341,9 @@ func handleRoutingIsochrone(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "routing isochrone", obj, format, transform)
+	return ShowJSON(os.Stdout, os.Stderr, "routing isochrone", obj, format, explicitFormat, transform)
 }
 
 func handleRoutingMatrix(ctx context.Context, cmd *cli.Command) error {
@@ -375,8 +376,9 @@ func handleRoutingMatrix(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "routing matrix", obj, format, transform)
+	return ShowJSON(os.Stdout, os.Stderr, "routing matrix", obj, format, explicitFormat, transform)
 }
 
 func handleRoutingNearest(ctx context.Context, cmd *cli.Command) error {
@@ -409,8 +411,9 @@ func handleRoutingNearest(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "routing nearest", obj, format, transform)
+	return ShowJSON(os.Stdout, os.Stderr, "routing nearest", obj, format, explicitFormat, transform)
 }
 
 func handleRoutingRoute(ctx context.Context, cmd *cli.Command) error {
@@ -443,6 +446,7 @@ func handleRoutingRoute(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "routing route", obj, format, transform)
+	return ShowJSON(os.Stdout, os.Stderr, "routing route", obj, format, explicitFormat, transform)
 }

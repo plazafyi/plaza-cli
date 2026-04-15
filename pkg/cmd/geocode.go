@@ -227,8 +227,9 @@ func handleGeocodeAutocomplete(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "geocode autocomplete", obj, format, transform)
+	return ShowJSON(os.Stdout, os.Stderr, "geocode autocomplete", obj, format, explicitFormat, transform)
 }
 
 func handleGeocodeBatch(ctx context.Context, cmd *cli.Command) error {
@@ -261,8 +262,9 @@ func handleGeocodeBatch(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "geocode batch", obj, format, transform)
+	return ShowJSON(os.Stdout, os.Stderr, "geocode batch", obj, format, explicitFormat, transform)
 }
 
 func handleGeocodeForward(ctx context.Context, cmd *cli.Command) error {
@@ -295,8 +297,9 @@ func handleGeocodeForward(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "geocode forward", obj, format, transform)
+	return ShowJSON(os.Stdout, os.Stderr, "geocode forward", obj, format, explicitFormat, transform)
 }
 
 func handleGeocodeReverse(ctx context.Context, cmd *cli.Command) error {
@@ -329,6 +332,7 @@ func handleGeocodeReverse(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "geocode reverse", obj, format, transform)
+	return ShowJSON(os.Stdout, os.Stderr, "geocode reverse", obj, format, explicitFormat, transform)
 }

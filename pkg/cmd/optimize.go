@@ -105,8 +105,9 @@ func handleOptimizeCreate(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "optimize create", obj, format, transform)
+	return ShowJSON(os.Stdout, os.Stderr, "optimize create", obj, format, explicitFormat, transform)
 }
 
 func handleOptimizeRetrieve(ctx context.Context, cmd *cli.Command) error {
@@ -140,6 +141,7 @@ func handleOptimizeRetrieve(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "optimize retrieve", obj, format, transform)
+	return ShowJSON(os.Stdout, os.Stderr, "optimize retrieve", obj, format, explicitFormat, transform)
 }

@@ -135,8 +135,9 @@ func handleDatasetsCreate(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "datasets create", obj, format, transform)
+	return ShowJSON(os.Stdout, os.Stderr, "datasets create", obj, format, explicitFormat, transform)
 }
 
 func handleDatasetsRetrieve(ctx context.Context, cmd *cli.Command) error {
@@ -170,8 +171,9 @@ func handleDatasetsRetrieve(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "datasets retrieve", obj, format, transform)
+	return ShowJSON(os.Stdout, os.Stderr, "datasets retrieve", obj, format, explicitFormat, transform)
 }
 
 func handleDatasetsList(ctx context.Context, cmd *cli.Command) error {
@@ -204,8 +206,9 @@ func handleDatasetsList(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "datasets list", obj, format, transform)
+	return ShowJSON(os.Stdout, os.Stderr, "datasets list", obj, format, explicitFormat, transform)
 }
 
 func handleDatasetsDelete(ctx context.Context, cmd *cli.Command) error {
