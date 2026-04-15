@@ -187,8 +187,9 @@ func handleFeaturesRetrieve(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "features retrieve", obj, format, transform)
+	return ShowJSON(os.Stdout, os.Stderr, "features retrieve", obj, format, explicitFormat, transform)
 }
 
 func handleFeaturesBatch(ctx context.Context, cmd *cli.Command) error {
@@ -221,8 +222,9 @@ func handleFeaturesBatch(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "features batch", obj, format, transform)
+	return ShowJSON(os.Stdout, os.Stderr, "features batch", obj, format, explicitFormat, transform)
 }
 
 func handleFeaturesQuery(ctx context.Context, cmd *cli.Command) error {
@@ -255,6 +257,7 @@ func handleFeaturesQuery(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "features query", obj, format, transform)
+	return ShowJSON(os.Stdout, os.Stderr, "features query", obj, format, explicitFormat, transform)
 }
