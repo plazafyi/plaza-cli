@@ -5,7 +5,6 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"os"
 
 	"github.com/plazafyi/plaza-cli/internal/apiquery"
 	"github.com/plazafyi/plaza-cli/internal/requestflag"
@@ -189,7 +188,12 @@ func handleFeaturesRetrieve(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, os.Stderr, "features retrieve", obj, format, explicitFormat, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		Title:          "features retrieve",
+		Transform:      transform,
+	})
 }
 
 func handleFeaturesBatch(ctx context.Context, cmd *cli.Command) error {
@@ -224,7 +228,12 @@ func handleFeaturesBatch(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, os.Stderr, "features batch", obj, format, explicitFormat, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		Title:          "features batch",
+		Transform:      transform,
+	})
 }
 
 func handleFeaturesQuery(ctx context.Context, cmd *cli.Command) error {
@@ -259,5 +268,10 @@ func handleFeaturesQuery(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, os.Stderr, "features query", obj, format, explicitFormat, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		Title:          "features query",
+		Transform:      transform,
+	})
 }

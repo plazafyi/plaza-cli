@@ -5,7 +5,6 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"os"
 
 	"github.com/plazafyi/plaza-cli/internal/apiquery"
 	"github.com/plazafyi/plaza-cli/internal/requestflag"
@@ -343,7 +342,12 @@ func handleRoutingIsochrone(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, os.Stderr, "routing isochrone", obj, format, explicitFormat, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		Title:          "routing isochrone",
+		Transform:      transform,
+	})
 }
 
 func handleRoutingMatrix(ctx context.Context, cmd *cli.Command) error {
@@ -378,7 +382,12 @@ func handleRoutingMatrix(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, os.Stderr, "routing matrix", obj, format, explicitFormat, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		Title:          "routing matrix",
+		Transform:      transform,
+	})
 }
 
 func handleRoutingNearest(ctx context.Context, cmd *cli.Command) error {
@@ -413,7 +422,12 @@ func handleRoutingNearest(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, os.Stderr, "routing nearest", obj, format, explicitFormat, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		Title:          "routing nearest",
+		Transform:      transform,
+	})
 }
 
 func handleRoutingRoute(ctx context.Context, cmd *cli.Command) error {
@@ -448,5 +462,10 @@ func handleRoutingRoute(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, os.Stderr, "routing route", obj, format, explicitFormat, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		Title:          "routing route",
+		Transform:      transform,
+	})
 }

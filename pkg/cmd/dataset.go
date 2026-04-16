@@ -5,7 +5,6 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"os"
 
 	"github.com/plazafyi/plaza-cli/internal/apiquery"
 	"github.com/plazafyi/plaza-cli/internal/requestflag"
@@ -137,7 +136,12 @@ func handleDatasetsCreate(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, os.Stderr, "datasets create", obj, format, explicitFormat, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		Title:          "datasets create",
+		Transform:      transform,
+	})
 }
 
 func handleDatasetsRetrieve(ctx context.Context, cmd *cli.Command) error {
@@ -173,7 +177,12 @@ func handleDatasetsRetrieve(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, os.Stderr, "datasets retrieve", obj, format, explicitFormat, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		Title:          "datasets retrieve",
+		Transform:      transform,
+	})
 }
 
 func handleDatasetsList(ctx context.Context, cmd *cli.Command) error {
@@ -208,7 +217,12 @@ func handleDatasetsList(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, os.Stderr, "datasets list", obj, format, explicitFormat, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		Title:          "datasets list",
+		Transform:      transform,
+	})
 }
 
 func handleDatasetsDelete(ctx context.Context, cmd *cli.Command) error {
