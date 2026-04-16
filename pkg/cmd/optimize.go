@@ -5,7 +5,6 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"os"
 
 	"github.com/plazafyi/plaza-cli/internal/apiquery"
 	"github.com/plazafyi/plaza-cli/internal/requestflag"
@@ -107,7 +106,12 @@ func handleOptimizeCreate(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, os.Stderr, "optimize create", obj, format, explicitFormat, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		Title:          "optimize create",
+		Transform:      transform,
+	})
 }
 
 func handleOptimizeRetrieve(ctx context.Context, cmd *cli.Command) error {
@@ -143,5 +147,10 @@ func handleOptimizeRetrieve(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, os.Stderr, "optimize retrieve", obj, format, explicitFormat, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		Title:          "optimize retrieve",
+		Transform:      transform,
+	})
 }

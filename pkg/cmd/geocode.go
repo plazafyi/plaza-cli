@@ -5,7 +5,6 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"os"
 
 	"github.com/plazafyi/plaza-cli/internal/apiquery"
 	"github.com/plazafyi/plaza-cli/internal/requestflag"
@@ -229,7 +228,12 @@ func handleGeocodeAutocomplete(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, os.Stderr, "geocode autocomplete", obj, format, explicitFormat, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		Title:          "geocode autocomplete",
+		Transform:      transform,
+	})
 }
 
 func handleGeocodeBatch(ctx context.Context, cmd *cli.Command) error {
@@ -264,7 +268,12 @@ func handleGeocodeBatch(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, os.Stderr, "geocode batch", obj, format, explicitFormat, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		Title:          "geocode batch",
+		Transform:      transform,
+	})
 }
 
 func handleGeocodeForward(ctx context.Context, cmd *cli.Command) error {
@@ -299,7 +308,12 @@ func handleGeocodeForward(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, os.Stderr, "geocode forward", obj, format, explicitFormat, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		Title:          "geocode forward",
+		Transform:      transform,
+	})
 }
 
 func handleGeocodeReverse(ctx context.Context, cmd *cli.Command) error {
@@ -334,5 +348,10 @@ func handleGeocodeReverse(ctx context.Context, cmd *cli.Command) error {
 	format := cmd.Root().String("format")
 	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, os.Stderr, "geocode reverse", obj, format, explicitFormat, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		Title:          "geocode reverse",
+		Transform:      transform,
+	})
 }
