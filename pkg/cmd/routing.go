@@ -345,6 +345,7 @@ func handleRoutingIsochrone(ctx context.Context, cmd *cli.Command) error {
 	return ShowJSON(obj, ShowJSONOpts{
 		ExplicitFormat: explicitFormat,
 		Format:         format,
+		RawOutput:      cmd.Root().Bool("raw-output"),
 		Title:          "routing isochrone",
 		Transform:      transform,
 	})
@@ -385,6 +386,7 @@ func handleRoutingMatrix(ctx context.Context, cmd *cli.Command) error {
 	return ShowJSON(obj, ShowJSONOpts{
 		ExplicitFormat: explicitFormat,
 		Format:         format,
+		RawOutput:      cmd.Root().Bool("raw-output"),
 		Title:          "routing matrix",
 		Transform:      transform,
 	})
@@ -425,6 +427,7 @@ func handleRoutingNearest(ctx context.Context, cmd *cli.Command) error {
 	return ShowJSON(obj, ShowJSONOpts{
 		ExplicitFormat: explicitFormat,
 		Format:         format,
+		RawOutput:      cmd.Root().Bool("raw-output"),
 		Title:          "routing nearest",
 		Transform:      transform,
 	})
@@ -465,6 +468,7 @@ func handleRoutingRoute(ctx context.Context, cmd *cli.Command) error {
 	return ShowJSON(obj, ShowJSONOpts{
 		ExplicitFormat: explicitFormat,
 		Format:         format,
+		RawOutput:      cmd.Root().Bool("raw-output"),
 		Title:          "routing route",
 		Transform:      transform,
 	})
