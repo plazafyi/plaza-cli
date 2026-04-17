@@ -99,6 +99,7 @@ func handleElevationLookup(ctx context.Context, cmd *cli.Command) error {
 	return ShowJSON(obj, ShowJSONOpts{
 		ExplicitFormat: explicitFormat,
 		Format:         format,
+		RawOutput:      cmd.Root().Bool("raw-output"),
 		Title:          "elevation lookup",
 		Transform:      transform,
 	})
@@ -139,6 +140,7 @@ func handleElevationProfile(ctx context.Context, cmd *cli.Command) error {
 	return ShowJSON(obj, ShowJSONOpts{
 		ExplicitFormat: explicitFormat,
 		Format:         format,
+		RawOutput:      cmd.Root().Bool("raw-output"),
 		Title:          "elevation profile",
 		Transform:      transform,
 	})

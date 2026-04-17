@@ -231,6 +231,7 @@ func handleGeocodeAutocomplete(ctx context.Context, cmd *cli.Command) error {
 	return ShowJSON(obj, ShowJSONOpts{
 		ExplicitFormat: explicitFormat,
 		Format:         format,
+		RawOutput:      cmd.Root().Bool("raw-output"),
 		Title:          "geocode autocomplete",
 		Transform:      transform,
 	})
@@ -271,6 +272,7 @@ func handleGeocodeBatch(ctx context.Context, cmd *cli.Command) error {
 	return ShowJSON(obj, ShowJSONOpts{
 		ExplicitFormat: explicitFormat,
 		Format:         format,
+		RawOutput:      cmd.Root().Bool("raw-output"),
 		Title:          "geocode batch",
 		Transform:      transform,
 	})
@@ -311,6 +313,7 @@ func handleGeocodeForward(ctx context.Context, cmd *cli.Command) error {
 	return ShowJSON(obj, ShowJSONOpts{
 		ExplicitFormat: explicitFormat,
 		Format:         format,
+		RawOutput:      cmd.Root().Bool("raw-output"),
 		Title:          "geocode forward",
 		Transform:      transform,
 	})
@@ -351,6 +354,7 @@ func handleGeocodeReverse(ctx context.Context, cmd *cli.Command) error {
 	return ShowJSON(obj, ShowJSONOpts{
 		ExplicitFormat: explicitFormat,
 		Format:         format,
+		RawOutput:      cmd.Root().Bool("raw-output"),
 		Title:          "geocode reverse",
 		Transform:      transform,
 	})
