@@ -54,9 +54,9 @@ plaza [resource] <command> [flags...]
 ```
 
 ```sh
-plaza elements query \
+plaza features query \
   --api-key 'My API Key' \
-  --near 48.8584,2.2945 \
+  --around '{coordinates: [2.2945, 48.8584], type: Point}' \
   --radius 500
 ```
 
@@ -119,3 +119,23 @@ base64-encoding). Note that absolute paths will begin with `@file://` or
 ```bash
 plaza <command> --arg @data://file.txt
 ```
+
+## Linking different Go SDK versions
+
+You can link the CLI against a different version of the Plaza Go SDK
+for development purposes using the `./scripts/link` script.
+
+To link to a specific version from a repository (version can be a branch,
+git tag, or commit hash):
+
+```bash
+./scripts/link github.com/org/repo@version
+```
+
+To link to a local copy of the SDK:
+
+```bash
+./scripts/link ../path/to/githubcomplazafyiplazago-go
+```
+
+If you run the link script without any arguments, it will default to `../githubcomplazafyiplazago-go`.
