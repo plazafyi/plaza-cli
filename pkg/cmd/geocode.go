@@ -30,7 +30,7 @@ var geocodeAutocomplete = requestflag.WithInnerFlags(cli.Command{
 			Usage:     "Response format: json (default), geojson, csv, ndjson",
 			QueryPath: "format",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*string]{
 			Name:     "country-code",
 			Usage:    "ISO 3166-1 alpha-2 country code to restrict results",
 			BodyPath: "country_code",
@@ -40,17 +40,17 @@ var geocodeAutocomplete = requestflag.WithInnerFlags(cli.Command{
 			Usage:    "GeoJSON Point geometry per RFC 7946. Coordinates use [longitude, latitude] order. Optional third element is altitude in meters.",
 			BodyPath: "focus",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*string]{
 			Name:     "lang",
 			Usage:    "Preferred response language (ISO 639-1)",
 			BodyPath: "lang",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*string]{
 			Name:     "layer",
 			Usage:    "Filter by result layer (e.g. `address`, `place`, `poi`)",
 			BodyPath: "layer",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*int64]{
 			Name:     "limit",
 			Usage:    "Maximum number of suggestions (default: 5, max: 20)",
 			BodyPath: "limit",
@@ -104,7 +104,7 @@ var geocodeForward = requestflag.WithInnerFlags(cli.Command{
 			Usage:     "Response format: json (default), geojson, csv, ndjson",
 			QueryPath: "format",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*string]{
 			Name:     "country-code",
 			Usage:    "ISO 3166-1 alpha-2 country code to restrict results",
 			BodyPath: "country_code",
@@ -114,17 +114,17 @@ var geocodeForward = requestflag.WithInnerFlags(cli.Command{
 			Usage:    "GeoJSON Point geometry per RFC 7946. Coordinates use [longitude, latitude] order. Optional third element is altitude in meters.",
 			BodyPath: "focus",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*string]{
 			Name:     "lang",
 			Usage:    "Preferred response language (ISO 639-1)",
 			BodyPath: "lang",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*string]{
 			Name:     "layer",
 			Usage:    "Filter by result layer (e.g. `address`, `place`, `poi`)",
 			BodyPath: "layer",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*int64]{
 			Name:     "limit",
 			Usage:    "Maximum number of results (default: 5, max: 50)",
 			BodyPath: "limit",
@@ -163,17 +163,17 @@ var geocodeReverse = requestflag.WithInnerFlags(cli.Command{
 			Usage:     "Response format: json (default), geojson, csv, ndjson",
 			QueryPath: "format",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*string]{
 			Name:     "lang",
 			Usage:    "Preferred response language (ISO 639-1)",
 			BodyPath: "lang",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*int64]{
 			Name:     "limit",
 			Usage:    "Maximum number of results (default: 1, max: 50)",
 			BodyPath: "limit",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*float64]{
 			Name:     "radius",
 			Usage:    "Search radius in meters (default: 100)",
 			BodyPath: "radius",

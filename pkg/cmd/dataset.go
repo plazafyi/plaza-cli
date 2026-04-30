@@ -31,27 +31,27 @@ var datasetsCreate = cli.Command{
 			Required: true,
 			BodyPath: "slug",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*string]{
 			Name:     "attribution",
 			Usage:    "Required attribution text",
 			BodyPath: "attribution",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*string]{
 			Name:     "description",
 			Usage:    "Dataset description",
 			BodyPath: "description",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*string]{
 			Name:     "license",
 			Usage:    "License identifier (e.g. CC-BY-4.0)",
 			BodyPath: "license",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*string]{
 			Name:     "source-url",
 			Usage:    "Source data URL",
 			BodyPath: "source_url",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*bool]{
 			Name:     "strict-mode",
 			Usage:    "Enable strict schema validation (default true)",
 			BodyPath: "strict_mode",
