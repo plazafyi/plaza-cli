@@ -204,8 +204,6 @@ func handleGeocodeAutocomplete(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 
-	params := githubcomplazafyiplazago.GeocodeAutocompleteParams{}
-
 	options, err := flagOptions(
 		cmd,
 		apiquery.NestedQueryFormatBrackets,
@@ -216,6 +214,8 @@ func handleGeocodeAutocomplete(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
+
+	params := githubcomplazafyiplazago.GeocodeAutocompleteParams{}
 
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))
@@ -245,8 +245,6 @@ func handleGeocodeBatch(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 
-	params := githubcomplazafyiplazago.GeocodeBatchParams{}
-
 	options, err := flagOptions(
 		cmd,
 		apiquery.NestedQueryFormatBrackets,
@@ -257,6 +255,8 @@ func handleGeocodeBatch(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
+
+	params := githubcomplazafyiplazago.GeocodeBatchParams{}
 
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))
@@ -286,8 +286,6 @@ func handleGeocodeForward(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 
-	params := githubcomplazafyiplazago.GeocodeForwardParams{}
-
 	options, err := flagOptions(
 		cmd,
 		apiquery.NestedQueryFormatBrackets,
@@ -298,6 +296,8 @@ func handleGeocodeForward(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
+
+	params := githubcomplazafyiplazago.GeocodeForwardParams{}
 
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))
@@ -327,8 +327,6 @@ func handleGeocodeReverse(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 
-	params := githubcomplazafyiplazago.GeocodeReverseParams{}
-
 	options, err := flagOptions(
 		cmd,
 		apiquery.NestedQueryFormatBrackets,
@@ -339,6 +337,8 @@ func handleGeocodeReverse(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
+
+	params := githubcomplazafyiplazago.GeocodeReverseParams{}
 
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))

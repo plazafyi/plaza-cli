@@ -20,12 +20,14 @@ var featuresRetrieve = cli.Command{
 	Suggest: true,
 	Flags: []cli.Flag{
 		&requestflag.Flag[string]{
-			Name:     "type",
-			Required: true,
+			Name:      "type",
+			Required:  true,
+			PathParam: "type",
 		},
 		&requestflag.Flag[int64]{
-			Name:     "id",
-			Required: true,
+			Name:      "id",
+			Required:  true,
+			PathParam: "id",
 		},
 	},
 	Action:          handleFeaturesRetrieve,
@@ -205,8 +207,6 @@ func handleFeaturesBatch(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 
-	params := githubcomplazafyiplazago.FeatureBatchParams{}
-
 	options, err := flagOptions(
 		cmd,
 		apiquery.NestedQueryFormatBrackets,
@@ -217,6 +217,8 @@ func handleFeaturesBatch(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
+
+	params := githubcomplazafyiplazago.FeatureBatchParams{}
 
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))
@@ -246,8 +248,6 @@ func handleFeaturesQuery(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 
-	params := githubcomplazafyiplazago.FeatureQueryParams{}
-
 	options, err := flagOptions(
 		cmd,
 		apiquery.NestedQueryFormatBrackets,
@@ -258,6 +258,8 @@ func handleFeaturesQuery(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
+
+	params := githubcomplazafyiplazago.FeatureQueryParams{}
 
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))
