@@ -19,16 +19,19 @@ var tilesGet = cli.Command{
 	Suggest: true,
 	Flags: []cli.Flag{
 		&requestflag.Flag[int64]{
-			Name:     "z",
-			Required: true,
+			Name:      "z",
+			Required:  true,
+			PathParam: "z",
 		},
 		&requestflag.Flag[int64]{
-			Name:     "x",
-			Required: true,
+			Name:      "x",
+			Required:  true,
+			PathParam: "x",
 		},
 		&requestflag.Flag[int64]{
-			Name:     "y",
-			Required: true,
+			Name:      "y",
+			Required:  true,
+			PathParam: "y",
 		},
 		&requestflag.Flag[string]{
 			Name:    "output",

@@ -72,8 +72,6 @@ func handleElevationLookup(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 
-	params := githubcomplazafyiplazago.ElevationLookupParams{}
-
 	options, err := flagOptions(
 		cmd,
 		apiquery.NestedQueryFormatBrackets,
@@ -84,6 +82,8 @@ func handleElevationLookup(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
+
+	params := githubcomplazafyiplazago.ElevationLookupParams{}
 
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))
@@ -113,8 +113,6 @@ func handleElevationProfile(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 
-	params := githubcomplazafyiplazago.ElevationProfileParams{}
-
 	options, err := flagOptions(
 		cmd,
 		apiquery.NestedQueryFormatBrackets,
@@ -125,6 +123,8 @@ func handleElevationProfile(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
+
+	params := githubcomplazafyiplazago.ElevationProfileParams{}
 
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))

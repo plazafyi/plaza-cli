@@ -320,8 +320,6 @@ func handleRoutingIsochrone(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 
-	params := githubcomplazafyiplazago.RoutingIsochroneParams{}
-
 	options, err := flagOptions(
 		cmd,
 		apiquery.NestedQueryFormatBrackets,
@@ -332,6 +330,8 @@ func handleRoutingIsochrone(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
+
+	params := githubcomplazafyiplazago.RoutingIsochroneParams{}
 
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))
@@ -361,8 +361,6 @@ func handleRoutingMatrix(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 
-	params := githubcomplazafyiplazago.RoutingMatrixParams{}
-
 	options, err := flagOptions(
 		cmd,
 		apiquery.NestedQueryFormatBrackets,
@@ -373,6 +371,8 @@ func handleRoutingMatrix(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
+
+	params := githubcomplazafyiplazago.RoutingMatrixParams{}
 
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))
@@ -402,8 +402,6 @@ func handleRoutingNearest(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 
-	params := githubcomplazafyiplazago.RoutingNearestParams{}
-
 	options, err := flagOptions(
 		cmd,
 		apiquery.NestedQueryFormatBrackets,
@@ -414,6 +412,8 @@ func handleRoutingNearest(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
+
+	params := githubcomplazafyiplazago.RoutingNearestParams{}
 
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))
@@ -443,8 +443,6 @@ func handleRoutingRoute(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 
-	params := githubcomplazafyiplazago.RoutingRouteParams{}
-
 	options, err := flagOptions(
 		cmd,
 		apiquery.NestedQueryFormatBrackets,
@@ -455,6 +453,8 @@ func handleRoutingRoute(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
+
+	params := githubcomplazafyiplazago.RoutingRouteParams{}
 
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))
