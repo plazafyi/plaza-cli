@@ -83,7 +83,7 @@ var routingMatrix = requestflag.WithInnerFlags(cli.Command{
 			Default:  "duration",
 			BodyPath: "annotations",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*float64]{
 			Name:     "fallback-speed",
 			Usage:    "Fallback speed in km/h for pairs where no route exists. When set, unreachable pairs get estimated values instead of null.",
 			BodyPath: "fallback_speed",
@@ -135,7 +135,7 @@ var routingNearest = requestflag.WithInnerFlags(cli.Command{
 			Required: true,
 			BodyPath: "geometry",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*float64]{
 			Name:     "radius",
 			Usage:    "Maximum search radius in meters (default: 100)",
 			BodyPath: "radius",
@@ -202,7 +202,7 @@ var routingRoute = requestflag.WithInnerFlags(cli.Command{
 			Usage:    "Electric vehicle parameters for EV-aware routing",
 			BodyPath: "ev",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*string]{
 			Name:     "exclude",
 			Usage:    "Comma-separated road types to exclude (e.g. `toll,motorway,ferry`)",
 			BodyPath: "exclude",
@@ -231,7 +231,7 @@ var routingRoute = requestflag.WithInnerFlags(cli.Command{
 			Default:  false,
 			BodyPath: "steps",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*string]{
 			Name:     "traffic-model",
 			Usage:    "Traffic prediction model (only used when `depart_at` is set)",
 			BodyPath: "traffic_model",
@@ -290,7 +290,7 @@ var routingRoute = requestflag.WithInnerFlags(cli.Command{
 			Usage:      "Minimum acceptable charge at destination as a fraction 0-1 (default: 0.10)",
 			InnerField: "min_charge_pct",
 		},
-		&requestflag.InnerFlag[any]{
+		&requestflag.InnerFlag[*float64]{
 			Name:       "ev.min-power-kw",
 			Usage:      "Minimum charger power in kilowatts",
 			InnerField: "min_power_kw",
@@ -298,14 +298,16 @@ var routingRoute = requestflag.WithInnerFlags(cli.Command{
 	},
 	"waypoint": {
 		&requestflag.InnerFlag[[]float64]{
-			Name:       "waypoint.coordinates",
-			Usage:      "[longitude, latitude] or [longitude, latitude, altitude]",
-			InnerField: "coordinates",
+			Name:                  "waypoint.coordinates",
+			Usage:                 "[longitude, latitude] or [longitude, latitude, altitude]",
+			InnerField:            "coordinates",
+			OuterIsArrayOfObjects: true,
 		},
 		&requestflag.InnerFlag[string]{
-			Name:       "waypoint.type",
-			Usage:      `Allowed values: "Point".`,
-			InnerField: "type",
+			Name:                  "waypoint.type",
+			Usage:                 `Allowed values: "Point".`,
+			InnerField:            "type",
+			OuterIsArrayOfObjects: true,
 		},
 	},
 })
