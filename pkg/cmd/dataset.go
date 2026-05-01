@@ -5,7 +5,6 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"os"
 
 	"github.com/plazafyi/plaza-cli/internal/apiquery"
 	"github.com/plazafyi/plaza-cli/internal/requestflag"
@@ -17,7 +16,7 @@ import (
 
 var datasetsCreate = cli.Command{
 	Name:    "create",
-	Usage:   "Create a new dataset (admin only)",
+	Usage:   "Create a new dataset",
 	Suggest: true,
 	Flags: []cli.Flag{
 		&requestflag.Flag[string]{
@@ -32,25 +31,30 @@ var datasetsCreate = cli.Command{
 			Required: true,
 			BodyPath: "slug",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*string]{
 			Name:     "attribution",
 			Usage:    "Required attribution text",
 			BodyPath: "attribution",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*string]{
 			Name:     "description",
 			Usage:    "Dataset description",
 			BodyPath: "description",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*string]{
 			Name:     "license",
 			Usage:    "License identifier (e.g. CC-BY-4.0)",
 			BodyPath: "license",
 		},
-		&requestflag.Flag[any]{
+		&requestflag.Flag[*string]{
 			Name:     "source-url",
 			Usage:    "Source data URL",
 			BodyPath: "source_url",
+		},
+		&requestflag.Flag[*bool]{
+			Name:     "strict-mode",
+			Usage:    "Enable strict schema validation (default true)",
+			BodyPath: "strict_mode",
 		},
 	},
 	Action:          handleDatasetsCreate,
@@ -63,8 +67,9 @@ var datasetsRetrieve = cli.Command{
 	Suggest: true,
 	Flags: []cli.Flag{
 		&requestflag.Flag[string]{
-			Name:     "id",
-			Required: true,
+			Name:      "id",
+			Required:  true,
+			PathParam: "id",
 		},
 	},
 	Action:          handleDatasetsRetrieve,
@@ -72,10 +77,16 @@ var datasetsRetrieve = cli.Command{
 }
 
 var datasetsList = cli.Command{
-	Name:            "list",
-	Usage:           "List all datasets",
-	Suggest:         true,
-	Flags:           []cli.Flag{},
+	Name:    "list",
+	Usage:   "List datasets",
+	Suggest: true,
+	Flags: []cli.Flag{
+		&requestflag.Flag[string]{
+			Name:      "scope",
+			Usage:     "Filter by scope: plaza, user. Default shows user's own + plaza datasets.",
+			QueryPath: "scope",
+		},
+	},
 	Action:          handleDatasetsList,
 	HideHelpCommand: true,
 }
@@ -86,75 +97,12 @@ var datasetsDelete = cli.Command{
 	Suggest: true,
 	Flags: []cli.Flag{
 		&requestflag.Flag[string]{
-			Name:     "id",
-			Required: true,
+			Name:      "id",
+			Required:  true,
+			PathParam: "id",
 		},
 	},
 	Action:          handleDatasetsDelete,
-	HideHelpCommand: true,
-}
-
-var datasetsFeatures = cli.Command{
-	Name:    "features",
-	Usage:   "Query features in a dataset",
-	Suggest: true,
-	Flags: []cli.Flag{
-		&requestflag.Flag[string]{
-			Name:     "id",
-			Required: true,
-		},
-		&requestflag.Flag[string]{
-			Name:      "cursor",
-			Usage:     "Cursor for pagination",
-			QueryPath: "cursor",
-		},
-		&requestflag.Flag[int64]{
-			Name:      "limit",
-			Usage:     "Maximum results",
-			QueryPath: "limit",
-		},
-		&requestflag.Flag[float64]{
-			Name:      "output-buffer",
-			Usage:     "Buffer geometry by meters",
-			QueryPath: "output[buffer]",
-		},
-		&requestflag.Flag[bool]{
-			Name:      "output-centroid",
-			Usage:     "Replace geometry with centroid",
-			QueryPath: "output[centroid]",
-		},
-		&requestflag.Flag[string]{
-			Name:      "output-fields",
-			Usage:     "Comma-separated property fields to include",
-			QueryPath: "output[fields]",
-		},
-		&requestflag.Flag[bool]{
-			Name:      "output-geometry",
-			Usage:     "Include geometry (default true)",
-			QueryPath: "output[geometry]",
-		},
-		&requestflag.Flag[string]{
-			Name:      "output-include",
-			Usage:     "Extra computed fields: bbox, distance, center",
-			QueryPath: "output[include]",
-		},
-		&requestflag.Flag[int64]{
-			Name:      "output-precision",
-			Usage:     "Coordinate decimal precision (1-15, default 7)",
-			QueryPath: "output[precision]",
-		},
-		&requestflag.Flag[float64]{
-			Name:      "output-simplify",
-			Usage:     "Simplify geometry tolerance in meters",
-			QueryPath: "output[simplify]",
-		},
-		&requestflag.Flag[string]{
-			Name:      "output-sort",
-			Usage:     "Sort by: distance, name, osm_id",
-			QueryPath: "output[sort]",
-		},
-	},
-	Action:          handleDatasetsFeatures,
 	HideHelpCommand: true,
 }
 
@@ -165,8 +113,6 @@ func handleDatasetsCreate(ctx context.Context, cmd *cli.Command) error {
 	if len(unusedArgs) > 0 {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
-
-	params := githubcomplazafyiplazago.DatasetNewParams{}
 
 	options, err := flagOptions(
 		cmd,
@@ -179,6 +125,8 @@ func handleDatasetsCreate(ctx context.Context, cmd *cli.Command) error {
 		return err
 	}
 
+	params := githubcomplazafyiplazago.DatasetNewParams{}
+
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))
 	_, err = client.Datasets.New(ctx, params, options...)
@@ -188,8 +136,15 @@ func handleDatasetsCreate(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "datasets create", obj, format, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		RawOutput:      cmd.Root().Bool("raw-output"),
+		Title:          "datasets create",
+		Transform:      transform,
+	})
 }
 
 func handleDatasetsRetrieve(ctx context.Context, cmd *cli.Command) error {
@@ -223,8 +178,15 @@ func handleDatasetsRetrieve(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "datasets retrieve", obj, format, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		RawOutput:      cmd.Root().Bool("raw-output"),
+		Title:          "datasets retrieve",
+		Transform:      transform,
+	})
 }
 
 func handleDatasetsList(ctx context.Context, cmd *cli.Command) error {
@@ -246,17 +208,26 @@ func handleDatasetsList(ctx context.Context, cmd *cli.Command) error {
 		return err
 	}
 
+	params := githubcomplazafyiplazago.DatasetListParams{}
+
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))
-	_, err = client.Datasets.List(ctx, options...)
+	_, err = client.Datasets.List(ctx, params, options...)
 	if err != nil {
 		return err
 	}
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "datasets list", obj, format, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		RawOutput:      cmd.Root().Bool("raw-output"),
+		Title:          "datasets list",
+		Transform:      transform,
+	})
 }
 
 func handleDatasetsDelete(ctx context.Context, cmd *cli.Command) error {
@@ -282,46 +253,4 @@ func handleDatasetsDelete(ctx context.Context, cmd *cli.Command) error {
 	}
 
 	return client.Datasets.Delete(ctx, cmd.Value("id").(string), options...)
-}
-
-func handleDatasetsFeatures(ctx context.Context, cmd *cli.Command) error {
-	client := githubcomplazafyiplazago.NewClient(getDefaultRequestOptions(cmd)...)
-	unusedArgs := cmd.Args().Slice()
-	if !cmd.IsSet("id") && len(unusedArgs) > 0 {
-		cmd.Set("id", unusedArgs[0])
-		unusedArgs = unusedArgs[1:]
-	}
-	if len(unusedArgs) > 0 {
-		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
-	}
-
-	params := githubcomplazafyiplazago.DatasetFeaturesParams{}
-
-	options, err := flagOptions(
-		cmd,
-		apiquery.NestedQueryFormatBrackets,
-		apiquery.ArrayQueryFormatComma,
-		EmptyBody,
-		false,
-	)
-	if err != nil {
-		return err
-	}
-
-	var res []byte
-	options = append(options, option.WithResponseBodyInto(&res))
-	_, err = client.Datasets.Features(
-		ctx,
-		cmd.Value("id").(string),
-		params,
-		options...,
-	)
-	if err != nil {
-		return err
-	}
-
-	obj := gjson.ParseBytes(res)
-	format := cmd.Root().String("format")
-	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "datasets features", obj, format, transform)
 }

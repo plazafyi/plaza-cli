@@ -15,34 +15,46 @@ func TestRoutingIsochrone(t *testing.T) {
 			t,
 			"--api-key", "string",
 			"routing", "isochrone",
-			"--lat", "0",
-			"--lng", "0",
-			"--time", "0",
-			"--mode", "mode",
-			"--output-fields", "output[fields]",
-			"--output-geometry=true",
-			"--output-include", "output[include]",
-			"--output-precision", "0",
-			"--output-simplify", "0",
+			"--geometry", "{coordinates: [2.3522, 48.8566], type: Point}",
+			"--time", "1",
+			"--format", "format",
+			"--mode", "auto",
 		)
 	})
-}
 
-func TestRoutingIsochronePost(t *testing.T) {
-	t.Run("regular flags", func(t *testing.T) {
+	t.Run("inner flags", func(t *testing.T) {
+		// Check that inner flags have been set up correctly
+		requestflag.CheckInnerFlags(routingIsochrone)
+
+		// Alternative argument passing style using inner flags
 		mocktest.TestRunMockTestWithFlags(
 			t,
 			"--api-key", "string",
-			"routing", "isochrone-post",
-			"--lat", "0",
-			"--lng", "0",
-			"--time", "0",
-			"--mode", "mode",
-			"--output-fields", "output[fields]",
-			"--output-geometry=true",
-			"--output-include", "output[include]",
-			"--output-precision", "0",
-			"--output-simplify", "0",
+			"routing", "isochrone",
+			"--geometry.coordinates", "[2.3522, 48.8566]",
+			"--geometry.type", "Point",
+			"--time", "1",
+			"--format", "format",
+			"--mode", "auto",
+		)
+	})
+
+	t.Run("piping data", func(t *testing.T) {
+		// Test piping YAML data over stdin
+		pipeData := []byte("" +
+			"geometry:\n" +
+			"  coordinates:\n" +
+			"    - 2.3522\n" +
+			"    - 48.8566\n" +
+			"  type: Point\n" +
+			"time:\n" +
+			"  - 1\n" +
+			"mode: auto\n")
+		mocktest.TestRunMockTestWithPipeAndFlags(
+			t, pipeData,
+			"--api-key", "string",
+			"routing", "isochrone",
+			"--format", "format",
 		)
 	})
 }
@@ -53,9 +65,9 @@ func TestRoutingMatrix(t *testing.T) {
 			t,
 			"--api-key", "string",
 			"routing", "matrix",
-			"--destination", "{lat: 48.8584, lng: 2.2945}",
-			"--origin", "{lat: 48.8566, lng: 2.3522}",
-			"--origin", "{lat: 48.8606, lng: 2.3376}",
+			"--destination", "{coordinates: [2.2945, 48.8584], type: Point}",
+			"--origin", "{coordinates: [2.3522, 48.8566], type: Point}",
+			"--origin", "{coordinates: [2.3376, 48.8606], type: Point}",
 			"--annotations", "annotations",
 			"--fallback-speed", "1",
 			"--mode", "auto",
@@ -71,12 +83,12 @@ func TestRoutingMatrix(t *testing.T) {
 			t,
 			"--api-key", "string",
 			"routing", "matrix",
-			"--destination.lat", "48.8584",
-			"--destination.lng", "2.2945",
-			"--origin.lat", "48.8566",
-			"--origin.lng", "2.3522",
-			"--origin.lat", "48.8606",
-			"--origin.lng", "2.3376",
+			"--destination.coordinates", "[2.2945, 48.8584]",
+			"--destination.type", "Point",
+			"--origin.coordinates", "[2.3522, 48.8566]",
+			"--origin.type", "Point",
+			"--origin.coordinates", "[2.3376, 48.8606]",
+			"--origin.type", "Point",
 			"--annotations", "annotations",
 			"--fallback-speed", "1",
 			"--mode", "auto",
@@ -87,13 +99,19 @@ func TestRoutingMatrix(t *testing.T) {
 		// Test piping YAML data over stdin
 		pipeData := []byte("" +
 			"destinations:\n" +
-			"  - lat: 48.8584\n" +
-			"    lng: 2.2945\n" +
+			"  - coordinates:\n" +
+			"      - 2.2945\n" +
+			"      - 48.8584\n" +
+			"    type: Point\n" +
 			"origins:\n" +
-			"  - lat: 48.8566\n" +
-			"    lng: 2.3522\n" +
-			"  - lat: 48.8606\n" +
-			"    lng: 2.3376\n" +
+			"  - coordinates:\n" +
+			"      - 2.3522\n" +
+			"      - 48.8566\n" +
+			"    type: Point\n" +
+			"  - coordinates:\n" +
+			"      - 2.3376\n" +
+			"      - 48.8606\n" +
+			"    type: Point\n" +
 			"annotations: annotations\n" +
 			"fallback_speed: 1\n" +
 			"mode: auto\n")
@@ -111,28 +129,39 @@ func TestRoutingNearest(t *testing.T) {
 			t,
 			"--api-key", "string",
 			"routing", "nearest",
-			"--lat", "0",
-			"--lng", "0",
-			"--output-fields", "output[fields]",
-			"--output-include", "output[include]",
-			"--output-precision", "0",
-			"--radius", "0",
+			"--geometry", "{coordinates: [2.3522, 48.8566], type: Point}",
+			"--radius", "1",
 		)
 	})
-}
 
-func TestRoutingNearestPost(t *testing.T) {
-	t.Run("regular flags", func(t *testing.T) {
+	t.Run("inner flags", func(t *testing.T) {
+		// Check that inner flags have been set up correctly
+		requestflag.CheckInnerFlags(routingNearest)
+
+		// Alternative argument passing style using inner flags
 		mocktest.TestRunMockTestWithFlags(
 			t,
 			"--api-key", "string",
-			"routing", "nearest-post",
-			"--lat", "0",
-			"--lng", "0",
-			"--output-fields", "output[fields]",
-			"--output-include", "output[include]",
-			"--output-precision", "0",
-			"--radius", "0",
+			"routing", "nearest",
+			"--geometry.coordinates", "[2.3522, 48.8566]",
+			"--geometry.type", "Point",
+			"--radius", "1",
+		)
+	})
+
+	t.Run("piping data", func(t *testing.T) {
+		// Test piping YAML data over stdin
+		pipeData := []byte("" +
+			"geometry:\n" +
+			"  coordinates:\n" +
+			"    - 2.3522\n" +
+			"    - 48.8566\n" +
+			"  type: Point\n" +
+			"radius: 1\n")
+		mocktest.TestRunMockTestWithPipeAndFlags(
+			t, pipeData,
+			"--api-key", "string",
+			"routing", "nearest",
 		)
 	})
 }
@@ -143,8 +172,9 @@ func TestRoutingRoute(t *testing.T) {
 			t,
 			"--api-key", "string",
 			"routing", "route",
-			"--destination", "{lat: 48.8584, lng: 2.2945}",
-			"--origin", "{lat: 48.8566, lng: 2.3522}",
+			"--destination", "{coordinates: [2.2945, 48.8584], type: Point}",
+			"--origin", "{coordinates: [2.3522, 48.8566], type: Point}",
+			"--format", "format",
 			"--alternatives", "0",
 			"--annotations=true",
 			"--depart-at", "'2019-12-27T18:11:19.117Z'",
@@ -155,7 +185,7 @@ func TestRoutingRoute(t *testing.T) {
 			"--overview", "full",
 			"--steps=true",
 			"--traffic-model", "best_guess",
-			"--waypoint", "[{lat: 48.8566, lng: 2.3522}]",
+			"--waypoint", "[{coordinates: [2.3522, 48.8566], type: Point}]",
 		)
 	})
 
@@ -168,10 +198,11 @@ func TestRoutingRoute(t *testing.T) {
 			t,
 			"--api-key", "string",
 			"routing", "route",
-			"--destination.lat", "48.8584",
-			"--destination.lng", "2.2945",
-			"--origin.lat", "48.8566",
-			"--origin.lng", "2.3522",
+			"--destination.coordinates", "[2.2945, 48.8584]",
+			"--destination.type", "Point",
+			"--origin.coordinates", "[2.3522, 48.8566]",
+			"--origin.type", "Point",
+			"--format", "format",
 			"--alternatives", "0",
 			"--annotations=true",
 			"--depart-at", "'2019-12-27T18:11:19.117Z'",
@@ -186,8 +217,8 @@ func TestRoutingRoute(t *testing.T) {
 			"--overview", "full",
 			"--steps=true",
 			"--traffic-model", "best_guess",
-			"--waypoint.lat", "48.8566",
-			"--waypoint.lng", "2.3522",
+			"--waypoint.coordinates", "[2.3522, 48.8566]",
+			"--waypoint.type", "Point",
 		)
 	})
 
@@ -195,11 +226,15 @@ func TestRoutingRoute(t *testing.T) {
 		// Test piping YAML data over stdin
 		pipeData := []byte("" +
 			"destination:\n" +
-			"  lat: 48.8584\n" +
-			"  lng: 2.2945\n" +
+			"  coordinates:\n" +
+			"    - 2.2945\n" +
+			"    - 48.8584\n" +
+			"  type: Point\n" +
 			"origin:\n" +
-			"  lat: 48.8566\n" +
-			"  lng: 2.3522\n" +
+			"  coordinates:\n" +
+			"    - 2.3522\n" +
+			"    - 48.8566\n" +
+			"  type: Point\n" +
 			"alternatives: 0\n" +
 			"annotations: true\n" +
 			"depart_at: '2019-12-27T18:11:19.117Z'\n" +
@@ -217,12 +252,15 @@ func TestRoutingRoute(t *testing.T) {
 			"steps: true\n" +
 			"traffic_model: best_guess\n" +
 			"waypoints:\n" +
-			"  - lat: 48.8566\n" +
-			"    lng: 2.3522\n")
+			"  - coordinates:\n" +
+			"      - 2.3522\n" +
+			"      - 48.8566\n" +
+			"    type: Point\n")
 		mocktest.TestRunMockTestWithPipeAndFlags(
 			t, pipeData,
 			"--api-key", "string",
 			"routing", "route",
+			"--format", "format",
 		)
 	})
 }

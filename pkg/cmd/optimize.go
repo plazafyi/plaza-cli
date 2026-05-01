@@ -5,7 +5,6 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"os"
 
 	"github.com/plazafyi/plaza-cli/internal/apiquery"
 	"github.com/plazafyi/plaza-cli/internal/requestflag"
@@ -20,11 +19,16 @@ var optimizeCreate = requestflag.WithInnerFlags(cli.Command{
 	Usage:   "Optimize route through waypoints",
 	Suggest: true,
 	Flags: []cli.Flag{
-		&requestflag.Flag[[]map[string]any]{
-			Name:     "waypoint",
-			Usage:    "Waypoints to visit in optimized order (2-50 points)",
+		&requestflag.Flag[map[string]any]{
+			Name:     "waypoints",
+			Usage:    "GeoJSON MultiPoint geometry per RFC 7946. An array of positions.",
 			Required: true,
 			BodyPath: "waypoints",
+		},
+		&requestflag.Flag[string]{
+			Name:      "format",
+			Usage:     "Response format: json (default), geojson, csv, ndjson",
+			QueryPath: "format",
 		},
 		&requestflag.Flag[string]{
 			Name:     "mode",
@@ -42,16 +46,16 @@ var optimizeCreate = requestflag.WithInnerFlags(cli.Command{
 	Action:          handleOptimizeCreate,
 	HideHelpCommand: true,
 }, map[string][]requestflag.HasOuterFlag{
-	"waypoint": {
-		&requestflag.InnerFlag[float64]{
-			Name:       "waypoint.lat",
-			Usage:      "Latitude in decimal degrees (-90 to 90)",
-			InnerField: "lat",
+	"waypoints": {
+		&requestflag.InnerFlag[[]any]{
+			Name:       "waypoints.coordinates",
+			Usage:      "Array of [lng, lat] or [lng, lat, alt] positions",
+			InnerField: "coordinates",
 		},
-		&requestflag.InnerFlag[float64]{
-			Name:       "waypoint.lng",
-			Usage:      "Longitude in decimal degrees (-180 to 180)",
-			InnerField: "lng",
+		&requestflag.InnerFlag[string]{
+			Name:       "waypoints.type",
+			Usage:      `Allowed values: "MultiPoint".`,
+			InnerField: "type",
 		},
 	},
 })
@@ -62,8 +66,9 @@ var optimizeRetrieve = cli.Command{
 	Suggest: true,
 	Flags: []cli.Flag{
 		&requestflag.Flag[string]{
-			Name:     "job-id",
-			Required: true,
+			Name:      "job-id",
+			Required:  true,
+			PathParam: "job_id",
 		},
 	},
 	Action:          handleOptimizeRetrieve,
@@ -78,8 +83,6 @@ func handleOptimizeCreate(ctx context.Context, cmd *cli.Command) error {
 		return fmt.Errorf("Unexpected extra arguments: %v", unusedArgs)
 	}
 
-	params := githubcomplazafyiplazago.OptimizeNewParams{}
-
 	options, err := flagOptions(
 		cmd,
 		apiquery.NestedQueryFormatBrackets,
@@ -91,6 +94,8 @@ func handleOptimizeCreate(ctx context.Context, cmd *cli.Command) error {
 		return err
 	}
 
+	params := githubcomplazafyiplazago.OptimizeNewParams{}
+
 	var res []byte
 	options = append(options, option.WithResponseBodyInto(&res))
 	_, err = client.Optimize.New(ctx, params, options...)
@@ -100,8 +105,15 @@ func handleOptimizeCreate(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "optimize create", obj, format, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		RawOutput:      cmd.Root().Bool("raw-output"),
+		Title:          "optimize create",
+		Transform:      transform,
+	})
 }
 
 func handleOptimizeRetrieve(ctx context.Context, cmd *cli.Command) error {
@@ -135,6 +147,13 @@ func handleOptimizeRetrieve(ctx context.Context, cmd *cli.Command) error {
 
 	obj := gjson.ParseBytes(res)
 	format := cmd.Root().String("format")
+	explicitFormat := cmd.Root().IsSet("format")
 	transform := cmd.Root().String("transform")
-	return ShowJSON(os.Stdout, "optimize retrieve", obj, format, transform)
+	return ShowJSON(obj, ShowJSONOpts{
+		ExplicitFormat: explicitFormat,
+		Format:         format,
+		RawOutput:      cmd.Root().Bool("raw-output"),
+		Title:          "optimize retrieve",
+		Transform:      transform,
+	})
 }

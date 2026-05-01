@@ -15,9 +15,8 @@ func TestOptimizeCreate(t *testing.T) {
 			t,
 			"--api-key", "string",
 			"optimize", "create",
-			"--waypoint", "{lat: 48.8566, lng: 2.3522}",
-			"--waypoint", "{lat: 48.8606, lng: 2.3376}",
-			"--waypoint", "{lat: 48.8584, lng: 2.2945}",
+			"--waypoints", "{coordinates: [[2.3522, 48.8566], [2.3376, 48.8606], [2.2945, 48.8584]], type: MultiPoint}",
+			"--format", "format",
 			"--mode", "auto",
 			"--roundtrip=false",
 		)
@@ -32,12 +31,9 @@ func TestOptimizeCreate(t *testing.T) {
 			t,
 			"--api-key", "string",
 			"optimize", "create",
-			"--waypoint.lat", "48.8566",
-			"--waypoint.lng", "2.3522",
-			"--waypoint.lat", "48.8606",
-			"--waypoint.lng", "2.3376",
-			"--waypoint.lat", "48.8584",
-			"--waypoint.lng", "2.2945",
+			"--waypoints.coordinates", "[[2.3522, 48.8566], [2.3376, 48.8606], [2.2945, 48.8584]]",
+			"--waypoints.type", "MultiPoint",
+			"--format", "format",
 			"--mode", "auto",
 			"--roundtrip=false",
 		)
@@ -47,18 +43,21 @@ func TestOptimizeCreate(t *testing.T) {
 		// Test piping YAML data over stdin
 		pipeData := []byte("" +
 			"waypoints:\n" +
-			"  - lat: 48.8566\n" +
-			"    lng: 2.3522\n" +
-			"  - lat: 48.8606\n" +
-			"    lng: 2.3376\n" +
-			"  - lat: 48.8584\n" +
-			"    lng: 2.2945\n" +
+			"  coordinates:\n" +
+			"    - - 2.3522\n" +
+			"      - 48.8566\n" +
+			"    - - 2.3376\n" +
+			"      - 48.8606\n" +
+			"    - - 2.2945\n" +
+			"      - 48.8584\n" +
+			"  type: MultiPoint\n" +
 			"mode: auto\n" +
 			"roundtrip: false\n")
 		mocktest.TestRunMockTestWithPipeAndFlags(
 			t, pipeData,
 			"--api-key", "string",
 			"optimize", "create",
+			"--format", "format",
 		)
 	})
 }
