@@ -15,9 +15,7 @@ func TestMapMatchMatch(t *testing.T) {
 			t,
 			"--api-key", "string",
 			"map-match", "match",
-			"--coordinate", "{lat: 48.8566, lng: 2.3522}",
-			"--coordinate", "{lat: 48.857, lng: 2.353}",
-			"--coordinate", "{lat: 48.8575, lng: 2.354}",
+			"--geometry", "{coordinates: [[2.3522, 48.8566], [2.353, 48.857], [2.354, 48.8575]], type: LineString}",
 			"--radius", "[0]",
 		)
 	})
@@ -31,12 +29,8 @@ func TestMapMatchMatch(t *testing.T) {
 			t,
 			"--api-key", "string",
 			"map-match", "match",
-			"--coordinate.lat", "48.8566",
-			"--coordinate.lng", "2.3522",
-			"--coordinate.lat", "48.857",
-			"--coordinate.lng", "2.353",
-			"--coordinate.lat", "48.8575",
-			"--coordinate.lng", "2.354",
+			"--geometry.coordinates", "[[2.3522, 48.8566], [2.353, 48.857], [2.354, 48.8575]]",
+			"--geometry.type", "LineString",
 			"--radius", "[0]",
 		)
 	})
@@ -44,13 +38,15 @@ func TestMapMatchMatch(t *testing.T) {
 	t.Run("piping data", func(t *testing.T) {
 		// Test piping YAML data over stdin
 		pipeData := []byte("" +
-			"coordinates:\n" +
-			"  - lat: 48.8566\n" +
-			"    lng: 2.3522\n" +
-			"  - lat: 48.857\n" +
-			"    lng: 2.353\n" +
-			"  - lat: 48.8575\n" +
-			"    lng: 2.354\n" +
+			"geometry:\n" +
+			"  coordinates:\n" +
+			"    - - 2.3522\n" +
+			"      - 48.8566\n" +
+			"    - - 2.353\n" +
+			"      - 48.857\n" +
+			"    - - 2.354\n" +
+			"      - 48.8575\n" +
+			"  type: LineString\n" +
 			"radiuses:\n" +
 			"  - 0\n")
 		mocktest.TestRunMockTestWithPipeAndFlags(

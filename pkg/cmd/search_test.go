@@ -16,23 +16,7 @@ func TestSearchQuery(t *testing.T) {
 			"search", "query",
 			"--q", "q",
 			"--cursor", "cursor",
-			"--limit", "0",
-			"--output-fields", "output[fields]",
-			"--output-include", "output[include]",
-			"--output-precision", "0",
-			"--output-sort", "output[sort]",
-		)
-	})
-}
-
-func TestSearchQueryPost(t *testing.T) {
-	t.Run("regular flags", func(t *testing.T) {
-		mocktest.TestRunMockTestWithFlags(
-			t,
-			"--api-key", "string",
-			"search", "query-post",
-			"--q", "q",
-			"--cursor", "cursor",
+			"--format", "format",
 			"--limit", "0",
 			"--output-fields", "output[fields]",
 			"--output-include", "output[include]",

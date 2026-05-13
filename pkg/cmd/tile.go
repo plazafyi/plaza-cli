@@ -5,6 +5,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/plazafyi/plaza-cli/internal/apiquery"
 	"github.com/plazafyi/plaza-cli/internal/requestflag"
@@ -18,16 +19,19 @@ var tilesGet = cli.Command{
 	Suggest: true,
 	Flags: []cli.Flag{
 		&requestflag.Flag[int64]{
-			Name:     "z",
-			Required: true,
+			Name:      "z",
+			Required:  true,
+			PathParam: "z",
 		},
 		&requestflag.Flag[int64]{
-			Name:     "x",
-			Required: true,
+			Name:      "x",
+			Required:  true,
+			PathParam: "x",
 		},
 		&requestflag.Flag[int64]{
-			Name:     "y",
-			Required: true,
+			Name:      "y",
+			Required:  true,
+			PathParam: "y",
 		},
 		&requestflag.Flag[string]{
 			Name:    "output",
@@ -79,7 +83,7 @@ func handleTilesGet(ctx context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
-	message, err := writeBinaryResponse(response, cmd.String("output"))
+	message, err := writeBinaryResponse(response, os.Stdout, cmd.String("output"))
 	if message != "" {
 		fmt.Println(message)
 	}
